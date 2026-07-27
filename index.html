@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>João Andrade — Dev Full Stack</title>
+<meta name="description" content="Construo produtos de ponta a ponta: backend, front-end, dados e IA. Confira Herm, DogBot e GreenLightFlow.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Inter:wght@500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; background: #08090A; }
+  body { margin: 0; background: #08090A; color: #F2F3EF; font-family: 'Space Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  ::selection { background: #C4F82A; color: #08090A; }
+  a { color: #F2F3EF; text-decoration: none; }
+  a:hover { color: #C4F82A; }
+  img { display: block; max-width: 100%; }
+  button { font-family: inherit; }
+
+  @keyframes om-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes om-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
+
+  [data-reveal] { transition: opacity .9s cubic-bezier(.16,.8,.24,1), translate .9s cubic-bezier(.16,.8,.24,1), filter .9s cubic-bezier(.16,.8,.24,1); }
+  [data-reveal].is-hidden { opacity: 0; translate: 0 30px; filter: blur(6px); }
+
+  [data-magnetic] { transition: translate .45s cubic-bezier(.2,.8,.2,1), box-shadow .3s, border-color .3s, background .3s; }
+
+  .btn-cta:hover { box-shadow: 0 0 34px rgba(196,248,42,.42); }
+  .btn-primary:hover { box-shadow: 0 0 30px rgba(242,243,239,.25); }
+  .btn-ghost:hover { border-color: rgba(196,248,42,.5); background: rgba(196,248,42,.06); }
+  .card-email:hover { box-shadow: 0 0 34px rgba(196,248,42,.35); }
+  .card-ghost:hover { border-color: rgba(196,248,42,.45); background: rgba(196,248,42,.05); }
+  [data-media] { transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .4s; -webkit-user-select: none; user-select: none; }
+  [data-media]:hover { border-color: rgba(196,248,42,.35); }
+  /* Mocks are <a> tags with images/text inside — browsers natively start a
+     link/image drag on mousedown+move, which "steals" the pointer until
+     mouseup and makes the rest of the page stop responding meanwhile. */
+  [data-media], [data-media] img, [data-media] a { -webkit-user-drag: none; user-drag: none; }
+
+  [data-node] { opacity: 0; transform: translateY(14px); transition: opacity .7s cubic-bezier(.2,.75,.2,1), transform .7s cubic-bezier(.2,.75,.2,1); }
+  [data-node].is-visible { opacity: 1; transform: none; }
+  [data-spine] { height: 0; transition: height 1.5s cubic-bezier(.2,.75,.2,1) .2s; }
+
+  @media (max-width: 900px) {
+    [data-pad] { padding-left: 20px !important; padding-right: 20px !important; }
+    [data-nav-links] { display: none !important; }
+    [data-nav-cta] { display: none !important; }
+    [data-menu-btn] { display: inline-flex !important; }
+    [data-header] { padding: 12px 20px !important; }
+    [data-hero] { padding-top: 128px !important; padding-bottom: 56px !important; }
+    [data-hero-grid] { grid-template-columns: 1fr !important; gap: 36px !important; align-items: start !important; margin-top: 34px !important; }
+    [data-project] { grid-template-columns: 1fr !important; gap: 28px !important; padding-bottom: 78px !important; }
+    [data-media] { order: -1 !important; aspect-ratio: 4/3 !important; }
+    [data-modules] { grid-template-columns: 1fr !important; }
+    [data-about-grid] { grid-template-columns: 1fr !important; gap: 40px !important; }
+    [data-cta-row] { flex-direction: column !important; align-items: stretch !important; }
+    [data-cta-row] > a { justify-content: center !important; }
+    [data-footer] { flex-direction: column !important; align-items: flex-start !important; gap: 18px !important; }
+    [data-contact-links] { grid-template-columns: 1fr !important; }
+    [data-section] { padding-top: 76px !important; padding-bottom: 20px !important; }
+  }
+  @media (max-width: 520px) {
+    [data-stats] { grid-template-columns: repeat(3, 1fr) !important; gap: 12px !important; }
+    [data-stats] div > div:first-child { font-size: 26px !important; }
+  }
+
+  /* ---- Mock components: viewport-keyed tiers, graduated by how narrow the page gets ----
+     (Container queries would be the cleaner way to make these self-contained, but
+     they weren't reliably applying here, so this sticks to plain media queries —
+     matched to how wide the [data-media] column actually ends up at each width.) */
+  @media (max-width: 640px) {
+    /* Herm: the text+demo two-column hero doesn't fit side by side — stack them,
+       demo second, and let the card grow taller instead of hiding it. */
+    .herm-card-media { aspect-ratio: 4/5.6 !important; }
+    .herm-mock__content { grid-template-columns: 1fr !important; grid-template-rows: auto auto !important; padding: 5% 7% !important; gap: 14px !important; }
+    .herm-mock__hero { text-align: center !important; }
+    .herm-mock__badge { margin-left: auto !important; margin-right: auto !important; }
+    .herm-mock__sub { margin-left: auto !important; margin-right: auto !important; margin-bottom: 10px !important; }
+    .herm-mock__ctas { justify-content: center !important; flex-wrap: wrap !important; margin-bottom: 8px !important; }
+    .herm-mock__checks { align-items: center !important; }
+    .herm-mock__title { font-size: 21px !important; margin-bottom: 8px !important; }
+    .herm-mock__demo { width: 100% !important; max-width: 320px !important; margin: 0 auto !important; padding: 13px !important; }
+
+    /* GreenLightFlow: tighten type and thin out the bubble field */
+    .glf-mock__title { font-size: 21px !important; }
+    .glf-mock__sub { font-size: 10.5px !important; max-width: 240px !important; }
+    .glf-mock__bubble:nth-child(even) { display: none !important; }
+  }
+
+  @media (max-width: 440px) {
+    .herm-card-media { aspect-ratio: 4/6.4 !important; }
+    .herm-mock__title { font-size: 18px !important; }
+    .herm-mock__sub { font-size: 9.5px !important; }
+    .herm-mock__checks { display: none !important; }
+    .herm-mock__demo { padding: 10px !important; }
+    .herm-mock__demo-head { padding-bottom: 9px !important; margin-bottom: 9px !important; }
+    .herm-mock__demo-avatar { width: 22px !important; height: 22px !important; font-size: 8px !important; }
+    .herm-mock__demo-name { font-size: 11px !important; }
+    .herm-mock__demo-seg { font-size: 8px !important; }
+    .herm-mock__demo-msg-user, .herm-mock__demo-msg-bot p, .herm-mock__demo-opt { font-size: 9.5px !important; }
+    .herm-mock__demo-panel { display: none !important; }
+
+    .glf-mock__title { font-size: 17px !important; }
+    .glf-mock__sub { display: none !important; }
+    .glf-mock__bubble:nth-child(3n) { display: none !important; }
+  }
+
+  @media (max-width: 340px) {
+    /* Very small phones: keep only the essentials legible */
+    .herm-card-media { aspect-ratio: 4/8.4 !important; }
+    .herm-mock__ctas .herm-mock__btn--ghost { display: none !important; }
+    .herm-mock__badge { font-size: 8px !important; padding: 4px 9px !important; }
+    .herm-mock__title { font-size: 16px !important; }
+    .herm-mock__demo-opt:not(.is-hit) { display: none !important; }
+    .glf-mock__ctas .glf-mock__btn--ghost { display: none !important; }
+    .dogbot-mock__bubble { font-size: 11px !important; }
+  }
+
+  /* ---- Recreated product mockups (browser-frame chrome) ---- */
+  .browser-frame { width: 100%; height: 100%; display: flex; flex-direction: column; font-family: 'Space Grotesk', system-ui, sans-serif; }
+  .browser-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #15171a; border-bottom: 1px solid rgba(255,255,255,.08); flex-shrink: 0; }
+  .browser-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .browser-url { margin-left: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #6E7378; background: rgba(255,255,255,.05); padding: 3px 10px; border-radius: 6px; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .browser-body { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+
+  /* Herm — recreated from the real Landing.tsx (dark #0B0D0F, brand green #22C55E, Manrope) */
+  .herm-mock { position: absolute; inset: 0; background: #0B0D0F; color: #E8EBED; font-family: 'Manrope', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
+  .herm-mock__nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 14px; height: 30px; background: rgba(11,13,15,.9); border-bottom: 1px solid #1B1F22; flex-shrink: 0; }
+  .herm-mock__brand { display: flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; color: #22C55E; }
+  .herm-mock__brand img { width: 12px; height: auto; }
+  .herm-mock__cta { font-size: 7.5px; font-weight: 700; background: #22C55E; color: #052E16; border-radius: 6px; padding: 4px 9px; white-space: nowrap; }
+  .herm-mock__content { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: center; padding: 24px 26px; overflow: hidden; }
+  .herm-mock__badge { display: inline-flex; align-items: center; gap: 6px; background: #141719; border: 1px solid #262B2F; border-radius: 999px; padding: 5px 12px; font-size: 9.5px; font-weight: 600; color: #9BA3A9; margin-bottom: 14px; }
+  .herm-mock__dot { width: 5px; height: 5px; border-radius: 50%; background: #22C55E; flex-shrink: 0; }
+  .herm-mock__title { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1.12; margin-bottom: 12px; }
+  .herm-mock__word-cycle { display: inline-block; color: #22C55E; transition: opacity .3s ease, transform .3s ease; }
+  .herm-mock__word-cycle.is-fading { opacity: 0; transform: translateY(6px); }
+  .herm-mock__sub { font-size: 11px; line-height: 1.55; color: #9BA3A9; margin-bottom: 16px; max-width: 260px; }
+  .herm-mock__ctas { display: flex; gap: 8px; margin-bottom: 14px; }
+  .herm-mock__btn { font-size: 9.5px; font-weight: 700; padding: 8px 15px; border-radius: 8px; white-space: nowrap; }
+  .herm-mock__btn--primary { background: #22C55E; color: #052E16; }
+  .herm-mock__btn--ghost { border: 1px solid #262B2F; color: #E8EBED; }
+  .herm-mock__checks { display: flex; flex-direction: column; gap: 6px; font-size: 9.5px; color: #9BA3A9; }
+  .herm-mock__checks span { display: flex; align-items: center; gap: 6px; }
+  .herm-mock__checks svg { flex-shrink: 0; width: 11px; height: 11px; }
+  .herm-mock__demo { background: #141719; border: 1px solid #262B2F; border-radius: 14px; padding: 17px; }
+  .herm-mock__demo-stack { display: grid; }
+  .herm-mock__demo-biz { grid-area: 1/1; opacity: 0; animation: herm-biz-cycle 27.5s ease-in-out infinite; }
+  .herm-mock__demo-head { display: flex; align-items: center; gap: 10px; padding-bottom: 13px; border-bottom: 1px solid #262B2F; margin-bottom: 13px; }
+  .herm-mock__demo-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 800; color: #052E16; flex-shrink: 0; }
+  .herm-mock__demo-name { font-size: 12.5px; font-weight: 700; }
+  .herm-mock__demo-seg { font-size: 9.5px; color: #9BA3A9; }
+  .herm-mock__demo-msg-user { align-self: flex-end; max-width: 88%; background: rgba(34,197,94,.14); border-radius: 11px 11px 3px 11px; padding: 10px 13px; font-size: 11px; line-height: 1.4; margin-bottom: 11px; margin-left: auto; }
+  .herm-mock__demo-msg-bot { position: relative; background: #1B1F22; border-radius: 11px 11px 11px 3px; padding: 12px 13px; opacity: 0; transform: translateY(6px); animation: herm-bot-in 27.5s ease-in-out infinite; }
+  .herm-mock__demo-msg-bot p { margin: 0 0 10px; font-size: 11px; line-height: 1.4; }
+  .herm-mock__demo-opt { display: block; text-align: center; font-size: 10px; font-weight: 700; color: #22C55E; background: #0B0D0F; border: 1px solid rgba(34,197,94,.32); border-radius: 7px; padding: 7px; margin-bottom: 7px; }
+  .herm-mock__demo-opt:last-child { margin-bottom: 0; }
+  .herm-mock__demo-opt.is-hit { animation: herm-opt-hit 27.5s linear infinite; }
+  .herm-mock__demo-panel { margin-top: 11px; background: #1B1F22; border-radius: 11px; padding: 11px 13px; opacity: 0; transform: translateY(8px); animation: herm-after-click 27.5s ease-in-out infinite; }
+  .herm-mock__demo-panel-label { margin: 0 0 8px; font-size: 8px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9BA3A9; }
+  .herm-mock__demo-thumbs { display: flex; gap: 6px; }
+  .herm-mock__demo-thumb { flex: 1; background: #0B0D0F; border: 1px solid #262B2F; border-radius: 7px; overflow: hidden; }
+  .herm-mock__demo-thumb-swatch { height: 18px; }
+  .herm-mock__demo-thumb-info { padding: 5px 6px; }
+  .herm-mock__demo-thumb-title { font-size: 7.5px; font-weight: 700; }
+  .herm-mock__demo-thumb-price { font-size: 7.5px; font-weight: 800; color: #22C55E; margin-top: 2px; }
+  .herm-mock__demo-slot { flex: 1; background: #0B0D0F; border: 1px solid #262B2F; border-radius: 7px; padding: 6px; text-align: center; font-size: 9px; font-weight: 700; }
+  .herm-mock__demo-slot.is-on { border-color: rgba(34,197,94,.4); color: #22C55E; }
+  @keyframes herm-biz-cycle { 0% { opacity: 0; transform: translateY(6px); } 4% { opacity: 1; transform: translateY(0); } 18% { opacity: 1; transform: translateY(0); } 23% { opacity: 0; transform: translateY(-6px); } 100% { opacity: 0; transform: translateY(-6px); } }
+  @keyframes herm-bot-in { 0%, 5% { opacity: 0; transform: translateY(6px); } 8%, 18% { opacity: 1; transform: none; } 19.5%, 100% { opacity: 0; } }
+  @keyframes herm-opt-hit { 0%, 11.5% { background: #0B0D0F; border-color: rgba(34,197,94,.32); } 13%, 16% { background: rgba(34,197,94,.18); border-color: #22C55E; } 18%, 100% { background: #0B0D0F; border-color: rgba(34,197,94,.32); } }
+  @keyframes herm-after-click { 0%, 13.5% { opacity: 0; transform: translateY(8px); } 16%, 18% { opacity: 1; transform: none; } 19.5%, 100% { opacity: 0; transform: translateY(-5px); } }
+  /* Note: the herm demo cycle (biz swap + word-cycle) intentionally keeps
+     animating even under prefers-reduced-motion — it's a small opacity/6px
+     fade, not the kind of large-scale motion that setting is meant to stop,
+     and freezing it made the mock look broken/static for those users. */
+
+  /* DogBot — WhatsApp chat recreation */
+  .dogbot-mock { position: absolute; inset: 0; background: #0A101E; display: flex; flex-direction: column; }
+  .dogbot-mock__header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #111A2E; border-bottom: 1px solid rgba(255,255,255,.05); flex-shrink: 0; }
+  .dogbot-mock__avatar { width: 32px; height: 32px; border-radius: 50%; background: #0E1526; box-shadow: 0 0 0 1.5px rgba(245,210,30,.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 15px; }
+  .dogbot-mock__body { flex: 1; min-height: 0; padding: 16px; display: flex; flex-direction: column; gap: 10px; justify-content: flex-end; overflow: hidden; overflow-anchor: none; }
+  .dogbot-mock__bubble { max-width: 82%; font-size: 12.5px; line-height: 1.4; padding: 9px 12px; border-radius: 12px; }
+  .dogbot-mock__bubble--user { align-self: flex-end; background: #25D366; color: #062B1A; font-weight: 600; border-bottom-right-radius: 3px; }
+  .dogbot-mock__bubble--bot { align-self: flex-start; background: #16213A; color: #E8EDF7; border-bottom-left-radius: 3px; }
+  .dogbot-mock__typing { align-self: flex-start; display: flex; gap: 4px; padding: 10px 13px; background: #16213A; border-radius: 12px; border-bottom-left-radius: 3px; }
+  .dogbot-mock__typing span { width: 5px; height: 5px; border-radius: 50%; background: #6E7378; animation: om-pulse 1.2s ease-in-out infinite; }
+  .dogbot-mock__typing span:nth-child(2) { animation-delay: .15s; }
+  .dogbot-mock__typing span:nth-child(3) { animation-delay: .3s; }
+  .dogbot-mock__bubble, .dogbot-mock__typing { animation: dogbot-in .35s ease; }
+  @keyframes dogbot-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+
+  /* GreenLightFlow — hero recreation (mirrors LandingPage.tsx/.css tokens) */
+  .glf-mock { position: absolute; inset: 0; background: linear-gradient(to right, #ffffff 0%, #ecfdf5 100%); color: #1f2937; font-family: 'Inter', system-ui, sans-serif; overflow: hidden; display: flex; flex-direction: column; }
+  .glf-mock__nav { display: flex; align-items: center; justify-content: space-between; padding: 0 14px; height: 30px; background: #fff; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
+  .glf-mock__brand { display: flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; color: #1f2937; letter-spacing: -.2px; }
+  .glf-mock__brand img { width: 13px; height: 13px; border-radius: 50%; }
+  .glf-mock__login { font-size: 8.5px; font-weight: 600; color: #10b981; border: 1.2px solid #10b981; border-radius: 6px; padding: 3px 8px; }
+  .glf-mock__content { flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column; justify-content: center; padding: 16px 22px; overflow: hidden; }
+  .glf-mock__hero { position: relative; z-index: 2; text-align: center; }
+  .glf-mock__badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16,185,129,.08); color: #059669; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 6px 15px 6px 10px; border-radius: 100px; margin-bottom: 18px; }
+  .glf-mock__dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .glf-mock__title { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.16; color: #111827; margin-bottom: 14px; }
+  .glf-mock__title span { color: #10b981; display: block; }
+  .glf-mock__sub { font-size: 13px; line-height: 1.55; color: #6b7280; max-width: 340px; margin: 0 auto 22px; }
+  .glf-mock__ctas { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; }
+  .glf-mock__btn { font-size: 12.5px; font-weight: 600; padding: 10px 19px; border-radius: 8px; white-space: nowrap; }
+  .glf-mock__btn--primary { background: #10b981; color: #fff; box-shadow: 0 3px 8px rgba(16,185,129,.3); }
+  .glf-mock__btn--ghost { border: 1.5px solid #d1d5db; color: #374151; }
+  .glf-mock__bubbles { position: absolute; inset: 0; z-index: 1; pointer-events: none; -webkit-mask-image: linear-gradient(to top, black 0%, black 78%, transparent 100%); mask-image: linear-gradient(to top, black 0%, black 78%, transparent 100%); }
+  .glf-mock__bubble { position: absolute; bottom: -14%; width: 26px; height: 26px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.9); border: 1.5px solid currentColor; color: var(--bubble-color); animation: glf-bubble-rise calc(var(--bubble-dur) * 2.2) var(--bubble-delay) ease-in infinite, glf-bubble-drift calc(var(--bubble-dur) * 1.5) var(--bubble-delay) ease-in-out infinite alternate; will-change: transform, bottom, opacity; }
+  .glf-mock__bubble svg { width: 60%; height: 60%; }
+  @keyframes glf-bubble-rise { 0% { bottom: -14%; transform: scale(.75); opacity: 0; } 10% { opacity: 1; transform: scale(1); } 80% { opacity: .8; } 100% { bottom: 112%; transform: scale(.82); opacity: 0; } }
+  @keyframes glf-bubble-drift { from { margin-left: 0; } to { margin-left: 6px; } }
+  @media (prefers-reduced-motion: reduce) { .glf-mock__bubble { animation: none; opacity: .9; } }
+
+  .project-logo { width: 52px; height: 52px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
+  @media (max-width: 900px) { .project-logo { width: 40px; height: 40px; } }
+</style>
+</head>
+<body>
+
+<div id="root" style="position:relative;min-height:100vh;background:#08090A;overflow-x:hidden">
+
+  <div id="spotlight" style="position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity .6s ease;background:radial-gradient(440px circle at 50% 50%, rgba(196,248,42,.085), transparent 70%)"></div>
+
+  <header data-header="" style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 40px;backdrop-filter:blur(14px);background:rgba(8,9,10,.74);border-bottom:1px solid rgba(255,255,255,.07)">
+    <a href="#top" style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase">
+      <span style="width:7px;height:7px;border-radius:50%;background:#C4F82A;animation:om-pulse 2.4s ease-in-out infinite"></span>
+      Andrade
+    </a>
+    <nav style="display:flex;align-items:center;gap:26px">
+      <div data-nav-links="" style="display:flex;align-items:center;gap:26px">
+        <a href="#projetos" data-en="Work" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#878C91;transition:color .25s">Projetos</a>
+        <a href="#consultoria" data-en="Consulting" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#878C91;transition:color .25s">Consultoria</a>
+        <a href="#sobre" data-en="About" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#878C91;transition:color .25s">Sobre</a>
+        <a href="#contato" data-en="Contact" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#878C91;transition:color .25s">Contato</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px;padding:3px;border:1px solid rgba(255,255,255,.12);border-radius:999px">
+        <button id="btnPT" style="border:0;background:transparent;color:#878C91;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;padding:5px 11px;border-radius:999px;cursor:pointer;transition:all .25s">PT</button>
+        <button id="btnEN" style="border:0;background:transparent;color:#878C91;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;padding:5px 11px;border-radius:999px;cursor:pointer;transition:all .25s">EN</button>
+      </div>
+      <a data-nav-cta="" href="#contato" data-magnetic="" class="btn-cta" style="padding:10px 20px;border-radius:999px;background:#C4F82A;color:#08090A;font-size:13px;font-weight:600"><span data-en="Let's talk">Vamos conversar</span></a>
+      <button data-menu-btn="" id="menuBtn" aria-label="Menu" style="display:none;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.14);background:transparent;border-radius:12px;cursor:pointer;color:#F2F3EF;font-family:'JetBrains Mono',monospace;font-size:15px">≡</button>
+    </nav>
+  </header>
+
+  <div id="mobileMenu" style="position:fixed;inset:0;z-index:49;background:rgba(8,9,10,.97);backdrop-filter:blur(16px);display:none;flex-direction:column;justify-content:center;gap:6px;padding:40px 24px">
+    <a href="#projetos" class="menu-link" data-en="Work" style="font-size:38px;font-weight:600;letter-spacing:-.03em;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)">Projetos</a>
+    <a href="#consultoria" class="menu-link" data-en="Consulting" style="font-size:38px;font-weight:600;letter-spacing:-.03em;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)">Consultoria</a>
+    <a href="#sobre" class="menu-link" data-en="About" style="font-size:38px;font-weight:600;letter-spacing:-.03em;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)">Sobre</a>
+    <a href="#contato" class="menu-link" data-en="Contact" style="font-size:38px;font-weight:600;letter-spacing:-.03em;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)">Contato</a>
+    <a href="#contato" class="menu-link" style="margin-top:28px;display:flex;align-items:center;justify-content:center;padding:17px 26px;border-radius:999px;background:#C4F82A;color:#08090A;font-size:16px;font-weight:600"><span data-en="Let's talk">Vamos conversar</span></a>
+  </div>
+
+  <section id="top" data-hero="" data-pad="" style="position:relative;z-index:2;padding:190px 40px 90px;max-width:1400px;margin:0 auto">
+    <div data-reveal="" style="display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 10px;border:1px solid rgba(196,248,42,.3);border-radius:999px;margin-bottom:40px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#C4F82A;animation:om-pulse 2s ease-in-out infinite"></span>
+      <span data-en="Full-stack developer · Open to new projects" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#C4F82A">Dev Full Stack · Aberto a novos projetos</span>
+    </div>
+
+    <h1 data-reveal="" data-delay="80" style="margin:0;font-size:clamp(44px,8.4vw,132px);line-height:.94;font-weight:600;letter-spacing:-.045em;max-width:15ch;text-wrap:balance">
+      <span data-en="I build products">Construo produtos</span> <span data-en="end to end" style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#C4F82A;letter-spacing:-.02em">de ponta a ponta</span>
+    </h1>
+
+    <div data-hero-grid="" style="display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:60px;align-items:end;margin-top:52px">
+      <p data-reveal="" data-delay="160" data-en="I work across the whole stack, from data modelling to the last pixel of the interface, building scalable solutions with a focus on performance and user experience." style="margin:0;font-size:clamp(16.5px,1.5vw,21px);line-height:1.55;color:#A7ACB1;max-width:52ch;text-wrap:pretty">Trabalho no stack inteiro, da modelagem dos dados até o último pixel da interface, desenvolvendo soluções escaláveis com foco em performance e experiência do usuário.</p>
+      <div data-reveal="" data-delay="240" data-stats="" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-top:1px solid rgba(255,255,255,.1);padding-top:22px">
+        <div>
+          <div style="font-size:34px;font-weight:600;letter-spacing:-.03em">2017</div>
+          <div data-en="first code" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#878C91;margin-top:6px">primeiro código</div>
+        </div>
+        <div>
+          <div style="font-size:34px;font-weight:600;letter-spacing:-.03em">2021</div>
+          <div data-en="freelancing" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#878C91;margin-top:6px">freelancer</div>
+        </div>
+        <div>
+          <div style="font-size:34px;font-weight:600;letter-spacing:-.03em">03</div>
+          <div data-en="own products" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#878C91;margin-top:6px">produtos autorais</div>
+        </div>
+      </div>
+    </div>
+
+    <div data-cta-row="" style="display:flex;gap:12px;margin-top:48px">
+      <a href="#projetos" data-reveal="" data-delay="300" data-magnetic="" class="btn-primary" style="display:inline-flex;align-items:center;gap:12px;padding:16px 26px;border-radius:999px;background:#F2F3EF;color:#08090A;font-size:15px;font-weight:600"><span data-en="See the work">Ver os projetos</span> <span style="font-family:'JetBrains Mono',monospace">↓</span></a>
+      <a href="https://github.com/JoaoAndrad" target="_blank" data-reveal="" data-delay="360" data-magnetic="" class="btn-ghost" style="display:inline-flex;align-items:center;gap:12px;padding:16px 26px;border-radius:999px;border:1px solid rgba(255,255,255,.16);color:#F2F3EF;font-size:15px;font-weight:500">GitHub <span style="font-family:'JetBrains Mono',monospace">↗</span></a>
+    </div>
+  </section>
+
+  <div style="position:relative;z-index:2;overflow:hidden;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);padding:18px 0">
+    <div style="display:flex;width:max-content;animation:om-marquee 34s linear infinite">
+      <div style="display:flex;gap:48px;padding-right:48px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#6E7378;white-space:nowrap">
+        <span>Node.js</span><span style="color:#C4F82A">✦</span><span>TypeScript</span><span style="color:#C4F82A">✦</span><span>React</span><span style="color:#C4F82A">✦</span><span>Flutter</span><span style="color:#C4F82A">✦</span><span>PostgreSQL</span><span style="color:#C4F82A">✦</span><span>Prisma</span><span style="color:#C4F82A">✦</span><span>Express</span><span style="color:#C4F82A">✦</span><span>C#</span><span style="color:#C4F82A">✦</span><span>Java</span><span style="color:#C4F82A">✦</span><span>Kotlin</span><span style="color:#C4F82A">✦</span>
+      </div>
+      <div style="display:flex;gap:48px;padding-right:48px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#6E7378;white-space:nowrap">
+        <span>Node.js</span><span style="color:#C4F82A">✦</span><span>TypeScript</span><span style="color:#C4F82A">✦</span><span>React</span><span style="color:#C4F82A">✦</span><span>Flutter</span><span style="color:#C4F82A">✦</span><span>PostgreSQL</span><span style="color:#C4F82A">✦</span><span>Prisma</span><span style="color:#C4F82A">✦</span><span>Express</span><span style="color:#C4F82A">✦</span><span>C#</span><span style="color:#C4F82A">✦</span><span>Java</span><span style="color:#C4F82A">✦</span><span>Kotlin</span><span style="color:#C4F82A">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="projetos" data-section="" data-pad="" style="position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:120px 40px 40px">
+    <div data-reveal="" style="display:flex;align-items:baseline;justify-content:space-between;gap:24px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:18px;margin-bottom:88px">
+      <h2 data-en="Selected work" style="margin:0;font-size:clamp(26px,3.4vw,46px);font-weight:600;letter-spacing:-.035em">Projetos selecionados</h2>
+      <span data-en="03 products" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:#878C91;white-space:nowrap">03 produtos</span>
+    </div>
+
+    <article data-project="" data-reveal="" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:72px;align-items:start;padding:0 0 110px">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4F82A;letter-spacing:.1em">01</span>
+          <span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span>
+          <span data-en="In development" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#878C91;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 11px;white-space:nowrap">Em desenvolvimento</span>
+        </div>
+        <h3 style="margin:0 0 8px;font-size:clamp(36px,4.6vw,64px);font-weight:600;letter-spacing:-.04em;line-height:1;display:flex;align-items:center;gap:16px"><img src="assets/logos/herm-logo.svg" alt="" class="project-logo" style="background:#0E1012;padding:5px"><a href="https://hermflow.com/" target="_blank" style="display:inline-flex;align-items:baseline;gap:14px">Herm <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#C4F82A">↗</span></a></h3>
+        <p data-en="B2B WhatsApp chatbot platform" style="margin:0 0 24px;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#C4F82A">Plataforma B2B de chatbot para WhatsApp</p>
+        <p data-en="Each partner builds their own service flows in a visual flow builder, and the bot talks straight to end customers on WhatsApp — without writing a single line of code." style="margin:0 0 32px;font-size:16.5px;line-height:1.65;color:#A7ACB1;max-width:48ch;text-wrap:pretty">Cada parceiro monta seus próprios fluxos de atendimento num flow builder visual, e o bot conversa direto com os clientes finais pelo WhatsApp — sem precisar escrever uma linha de código.</p>
+        <ul style="list-style:none;margin:0 0 32px;padding:0;display:grid;gap:14px">
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Robust visual flow builder (React Flow) with several customizable templates">Flow builder visual (React Flow) robusto e com vários templates personalizáveis</span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Catalog with categories, variants, cart and checkout">Catálogo com categorias, variações, carrinho e checkout</span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Native WhatsApp carousel for browsing the catalog">Carrossel nativo do WhatsApp para navegação de catálogo</span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Real isolation between accounts, a dedicated WhatsApp number per partner">Isolamento real entre contas, número de WhatsApp dedicado por parceiro</span></li>
+        </ul>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Node.js</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">TypeScript</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Express</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">React</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Prisma</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">PostgreSQL</span>
+        </div>
+      </div>
+      <a data-media="" class="herm-card-media" href="https://hermflow.com/" target="_blank" aria-label="Abrir o Herm" draggable="false" style="display:block;position:relative;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:#0E1012;aspect-ratio:4/3">
+        <div class="browser-frame" role="img" aria-label="Recriação da landing page do Herm">
+          <div class="browser-bar">
+            <span class="browser-dot" style="background:#ff5f56"></span>
+            <span class="browser-dot" style="background:#ffbd2e"></span>
+            <span class="browser-dot" style="background:#27c93f"></span>
+            <span class="browser-url">hermflow.com</span>
+          </div>
+          <div class="browser-body">
+            <div class="herm-mock">
+              <div class="herm-mock__nav">
+                <div class="herm-mock__brand"><img src="assets/logos/herm-logo.svg" alt="">herm</div>
+                <span class="herm-mock__cta">Começar grátis</span>
+              </div>
+              <div class="herm-mock__content">
+                <div>
+                  <div class="herm-mock__badge"><span class="herm-mock__dot"></span>Atende no seu próprio número de WhatsApp</div>
+                  <div class="herm-mock__title">Seu WhatsApp <span class="herm-mock__word-cycle" id="hermWordCycle">vendendo</span> sozinho</div>
+                  <p class="herm-mock__sub">O cliente manda mensagem, o atendimento responde na hora e o pedido cai no painel.</p>
+                  <div class="herm-mock__ctas">
+                    <span class="herm-mock__btn herm-mock__btn--primary">Começar teste grátis</span>
+                    <span class="herm-mock__btn herm-mock__btn--ghost">Ver como funciona</span>
+                  </div>
+                  <div class="herm-mock__checks">
+                    <span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sem programar</span>
+                    <span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No número que já conhecem</span>
+                  </div>
+                </div>
+                <div class="herm-mock__demo">
+                  <div class="herm-mock__demo-stack">
+                    <div class="herm-mock__demo-biz" style="animation-delay:-2.5s">
+                      <div class="herm-mock__demo-head">
+                        <div class="herm-mock__demo-avatar" style="background:#E0A82E">PZ</div>
+                        <div>
+                          <div class="herm-mock__demo-name">Padaria do Zé</div>
+                          <div class="herm-mock__demo-seg">Vendas e entrega</div>
+                        </div>
+                      </div>
+                      <div class="herm-mock__demo-msg-user">Bom dia! Vocês entregam hoje ainda?</div>
+                      <div class="herm-mock__demo-msg-bot" style="animation-delay:-2.5s">
+                        <p>Bom dia! Entregamos até as 18h. O que você quer fazer?</p>
+                        <span class="herm-mock__demo-opt is-hit" style="animation-delay:-2.5s">Ver cardápio</span>
+                        <span class="herm-mock__demo-opt">Repetir último pedido</span>
+                        <span class="herm-mock__demo-opt">Falar com atendente</span>
+                      </div>
+                      <div class="herm-mock__demo-panel" style="animation-delay:-2.5s">
+                        <p class="herm-mock__demo-panel-label">Cardápio de hoje</p>
+                        <div class="herm-mock__demo-thumbs">
+                          <div class="herm-mock__demo-thumb"><div class="herm-mock__demo-thumb-swatch" style="background:#E0A82E"></div><div class="herm-mock__demo-thumb-info"><div class="herm-mock__demo-thumb-title">Pão na chapa</div><div class="herm-mock__demo-thumb-price">R$ 7,50</div></div></div>
+                          <div class="herm-mock__demo-thumb"><div class="herm-mock__demo-thumb-swatch" style="background:#4A9EDA"></div><div class="herm-mock__demo-thumb-info"><div class="herm-mock__demo-thumb-title">Café coado</div><div class="herm-mock__demo-thumb-price">R$ 5,00</div></div></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="herm-mock__demo-biz" style="animation-delay:3s">
+                      <div class="herm-mock__demo-head">
+                        <div class="herm-mock__demo-avatar" style="background:#F472B6">LA</div>
+                        <div>
+                          <div class="herm-mock__demo-name">Loja Aurora</div>
+                          <div class="herm-mock__demo-seg">Moda e trocas</div>
+                        </div>
+                      </div>
+                      <div class="herm-mock__demo-msg-user">Tem essa camiseta no tamanho M?</div>
+                      <div class="herm-mock__demo-msg-bot" style="animation-delay:3s">
+                        <p>Temos sim! Quer ver as peças disponíveis?</p>
+                        <span class="herm-mock__demo-opt is-hit" style="animation-delay:3s">Ver novidades</span>
+                        <span class="herm-mock__demo-opt">Consultar tamanho</span>
+                        <span class="herm-mock__demo-opt">Trocar uma peça</span>
+                      </div>
+                      <div class="herm-mock__demo-panel" style="animation-delay:3s">
+                        <p class="herm-mock__demo-panel-label">Disponível no seu tamanho</p>
+                        <div class="herm-mock__demo-thumbs">
+                          <div class="herm-mock__demo-thumb"><div class="herm-mock__demo-thumb-swatch" style="background:#F472B6"></div><div class="herm-mock__demo-thumb-info"><div class="herm-mock__demo-thumb-title">Camiseta · M</div><div class="herm-mock__demo-thumb-price">R$ 79,90</div></div></div>
+                          <div class="herm-mock__demo-thumb"><div class="herm-mock__demo-thumb-swatch" style="background:#A78BFA"></div><div class="herm-mock__demo-thumb-info"><div class="herm-mock__demo-thumb-title">Moletom · M</div><div class="herm-mock__demo-thumb-price">R$ 189,00</div></div></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="herm-mock__demo-biz" style="animation-delay:8.5s">
+                      <div class="herm-mock__demo-head">
+                        <div class="herm-mock__demo-avatar" style="background:#4A9EDA">SB</div>
+                        <div>
+                          <div class="herm-mock__demo-name">Studio Bela</div>
+                          <div class="herm-mock__demo-seg">Serviços com agenda</div>
+                        </div>
+                      </div>
+                      <div class="herm-mock__demo-msg-user">Quero marcar um corte para amanhã</div>
+                      <div class="herm-mock__demo-msg-bot" style="animation-delay:8.5s">
+                        <p>Claro! Escolha o serviço e eu mostro os horários.</p>
+                        <span class="herm-mock__demo-opt">Corte</span>
+                        <span class="herm-mock__demo-opt">Coloração</span>
+                        <span class="herm-mock__demo-opt is-hit" style="animation-delay:8.5s">Ver todos os horários</span>
+                      </div>
+                      <div class="herm-mock__demo-panel" style="animation-delay:8.5s">
+                        <p class="herm-mock__demo-panel-label">Horários de amanhã</p>
+                        <div class="herm-mock__demo-thumbs">
+                          <div class="herm-mock__demo-slot is-on">09:00</div>
+                          <div class="herm-mock__demo-slot">13:30</div>
+                          <div class="herm-mock__demo-slot">16:00</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </article>
+
+    <article data-project="" data-reveal="" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:72px;align-items:start;padding:0 0 110px">
+      <a data-media="" href="https://dogbot.squareweb.app/admin/spa/" target="_blank" aria-label="Abrir o DogBot" draggable="false" style="display:block;position:relative;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:#0E1012;aspect-ratio:4/3">
+        <div class="browser-frame" role="img" aria-label="Recriação da conversa com o DogBot no WhatsApp">
+          <div class="browser-bar">
+            <span class="browser-dot" style="background:#ff5f56"></span>
+            <span class="browser-dot" style="background:#ffbd2e"></span>
+            <span class="browser-dot" style="background:#27c93f"></span>
+            <span class="browser-url">wa.me/dogbot</span>
+          </div>
+          <div class="browser-body">
+            <div class="dogbot-mock">
+              <div class="dogbot-mock__header">
+                <div class="dogbot-mock__avatar"><img src="assets/logos/dogbot-logo.png" alt="" style="width:20px;height:20px;border-radius:50%;object-fit:cover"></div>
+                <div>
+                  <div style="font-weight:700;font-size:13.5px;color:#F4F7FF">DogBot</div>
+                  <div style="font-size:10.5px;color:#5CE58F;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#25D366"></span>online agora</div>
+                </div>
+              </div>
+              <div class="dogbot-mock__body" id="dogbotChat"></div>
+            </div>
+          </div>
+        </div>
+      </a>
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4F82A;letter-spacing:.1em">02</span>
+          <span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span>
+        </div>
+        <h3 style="margin:0 0 8px;font-size:clamp(36px,4.6vw,64px);font-weight:600;letter-spacing:-.04em;line-height:1;display:flex;align-items:center;gap:16px"><img src="assets/logos/dogbot-logo.png" alt="" class="project-logo"><a href="https://dogbot.squareweb.app/admin/spa/" target="_blank" style="display:inline-flex;align-items:baseline;gap:14px">DogBot <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#C4F82A">↗</span></a></h3>
+        <p data-en="Multi-purpose personal assistant on WhatsApp" style="margin:0 0 24px;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#C4F82A">Assistente pessoal multifuncional no WhatsApp</p>
+        <p data-en="Organized into independent modules, with its own React admin panel and a companion app with a floating bubble for Windows and Android." style="margin:0 0 30px;font-size:16.5px;line-height:1.65;color:#A7ACB1;max-width:48ch;text-wrap:pretty">Organizado em módulos independentes, com painel administrativo próprio em React e um app companion com bolha flutuante para Windows e Android.</p>
+        <div data-modules="" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.09);border-radius:14px;overflow:hidden;margin-bottom:32px">
+          <div style="background:#0C0E10;padding:16px 18px"><div data-en="Finance" style="font-size:14.5px;font-weight:600;margin-bottom:5px">Financeiro</div><div data-en="Bills, cards and budgets with natural-language commands via AI" style="font-size:13px;line-height:1.45;color:#878C91">Contas, cartões e orçamentos com comandos em linguagem natural via IA</div></div>
+          <div style="background:#0C0E10;padding:16px 18px"><div data-en="Routines" style="font-size:14.5px;font-weight:600;margin-bottom:5px">Rotinas</div><div data-en="Recurring reminders, solo or in groups" style="font-size:13px;line-height:1.45;color:#878C91">Lembretes recorrentes individuais ou em grupo</div></div>
+          <div style="background:#0C0E10;padding:16px 18px"><div style="font-size:14.5px;font-weight:600;margin-bottom:5px">DogLog</div><div data-en="Personal film and book diary with shared lists" style="font-size:13px;line-height:1.45;color:#878C91">Diário de filmes e livros com listas colaborativas</div></div>
+          <div style="background:#0C0E10;padding:16px 18px"><div style="font-size:14.5px;font-weight:600;margin-bottom:5px">Spotify</div><div data-en="Collaborative Jam sessions, track voting and stats" style="font-size:13px;line-height:1.45;color:#878C91">Sessões de Jam, votação de faixas e estatísticas</div></div>
+          <div style="background:#0C0E10;padding:16px 18px"><div data-en="Sports" style="font-size:14.5px;font-weight:600;margin-bottom:5px">Esportes</div><div data-en="World Cup pool and Cartola FC integration" style="font-size:13px;line-height:1.45;color:#878C91">Bolão da Copa do Mundo e integração com o Cartola FC</div></div>
+          <div style="background:#0C0E10;padding:16px 18px"><div style="font-size:14.5px;font-weight:600;margin-bottom:5px">Fitness</div><div data-en="Workout logging with group ranking and streaks" style="font-size:13px;line-height:1.45;color:#878C91">Registro de treino com ranking e streak por grupo</div></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Node.js</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">React</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">PostgreSQL</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Prisma</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Flutter</span>
+        </div>
+      </div>
+    </article>
+
+    <article data-project="" data-reveal="" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:72px;align-items:start;padding:0 0 40px">
+      <div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C4F82A;letter-spacing:.1em">03</span>
+          <span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span>
+          <span data-en="Founder &amp; lead dev" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:#08090A;background:#C4F82A;border-radius:999px;padding:5px 11px;white-space:nowrap">Fundador &amp; dev principal</span>
+        </div>
+        <h3 style="margin:0 0 8px;font-size:clamp(32px,4.2vw,58px);font-weight:600;letter-spacing:-.04em;line-height:1;display:flex;align-items:center;gap:16px"><img src="assets/logos/glf-logo.png" alt="" class="project-logo"><a href="http://greenlightflow.com/" target="_blank" style="display:inline-flex;align-items:baseline;gap:14px">GreenLightFlow <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#C4F82A">↗</span></a></h3>
+        <p data-en="Social media scheduling SaaS" style="margin:0 0 24px;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#C4F82A">SaaS de agendamento para redes sociais</p>
+        <p data-en="Built from zero for agencies and creators juggling several accounts at once — I architected and shipped the whole product." style="margin:0 0 32px;font-size:16.5px;line-height:1.65;color:#A7ACB1;max-width:48ch;text-wrap:pretty">Construído do zero para agências e criadores que gerenciam várias contas ao mesmo tempo — arquitetei e desenvolvi o produto inteiro.</p>
+        <ul style="list-style:none;margin:0 0 32px;padding:0;display:grid;gap:14px">
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Publishing to Instagram, YouTube, TikTok and LinkedIn, multiple accounts per provider">Publicação em Instagram, YouTube, TikTok e LinkedIn, múltiplas contas por provedor</span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Editorial flow (draft → reviewed → published) before anything gets scheduled">Fluxo editorial (rascunho → revisado → publicado) antes de qualquer agendamento</span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Own media storage system using S3 and Blobs">Sistema de armazenamento de mídia próprio usando S3 e Blobs</span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15.5px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span data-en="Cropping and basic image editing in the browser — zero server processing cost">Corte e edições básicas de imagem no navegador, sem custo de processamento no servidor</span></li>
+        </ul>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Node.js</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Express</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">TypeScript</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">React</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Prisma</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">PostgreSQL</span>
+        </div>
+      </div>
+      <a data-media="" href="http://greenlightflow.com/" target="_blank" aria-label="Abrir o GreenLightFlow" draggable="false" style="display:block;position:relative;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:#0E1012;aspect-ratio:4/3">
+        <div class="browser-frame" role="img" aria-label="Recriação da landing page do GreenLightFlow">
+          <div class="browser-bar">
+            <span class="browser-dot" style="background:#ff5f56"></span>
+            <span class="browser-dot" style="background:#ffbd2e"></span>
+            <span class="browser-dot" style="background:#27c93f"></span>
+            <span class="browser-url">greenlightflow.com</span>
+          </div>
+          <div class="browser-body">
+            <div class="glf-mock">
+              <div class="glf-mock__nav">
+                <div class="glf-mock__brand"><img src="assets/logos/glf-logo.png" alt="">GreenLightFlow</div>
+                <span class="glf-mock__login">Entrar</span>
+              </div>
+              <div class="glf-mock__content">
+                <div class="glf-mock__bubbles" aria-hidden="true">
+                  <div class="glf-mock__bubble" style="left:1%;width:17px;height:17px;--bubble-color:#e1306c;--bubble-dur:5.2s;--bubble-delay:0s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:10%;width:15px;height:15px;--bubble-color:#2d2d2d;--bubble-dur:4.3s;--bubble-delay:1.9s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88 2.1V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:20%;width:16px;height:16px;--bubble-color:#0a66c2;--bubble-dur:5.6s;--bubble-delay:0.6s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:30%;width:15px;height:15px;--bubble-color:#ff0000;--bubble-dur:4.1s;--bubble-delay:2.6s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:40%;width:14px;height:14px;--bubble-color:#e1306c;--bubble-dur:5.8s;--bubble-delay:1.1s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:52%;width:17px;height:17px;--bubble-color:#2d2d2d;--bubble-dur:4.6s;--bubble-delay:3.1s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88 2.1V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:63%;width:15px;height:15px;--bubble-color:#0a66c2;--bubble-dur:5.3s;--bubble-delay:0.3s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:73%;width:16px;height:16px;--bubble-color:#ff0000;--bubble-dur:4.9s;--bubble-delay:2.2s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:83%;width:13px;height:13px;--bubble-color:#0a66c2;--bubble-dur:5.5s;--bubble-delay:1.4s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:91%;width:17px;height:17px;--bubble-color:#e1306c;--bubble-dur:4.7s;--bubble-delay:3.4s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+                  <div class="glf-mock__bubble" style="left:97%;width:15px;height:15px;--bubble-color:#2d2d2d;--bubble-dur:5.0s;--bubble-delay:0.9s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88 2.1V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg></div>
+                </div>
+                <div class="glf-mock__hero">
+                  <div class="glf-mock__badge">
+                    <span class="glf-mock__dot" style="background:#dc2626"></span>
+                    <span class="glf-mock__dot" style="background:#ca8a04"></span>
+                    <span class="glf-mock__dot" style="background:#10b981"></span>
+                    Fluxo editorial com sinal verde
+                  </div>
+                  <div class="glf-mock__title">Dê o sinal verde para<span>seu conteúdo fluir</span></div>
+                  <p class="glf-mock__sub">Para criadores de conteúdo, marcas e agências: do rascunho à publicação com entrega automática em todas as redes.</p>
+                  <div class="glf-mock__ctas">
+                    <span class="glf-mock__btn glf-mock__btn--primary">Começar agora</span>
+                    <span class="glf-mock__btn glf-mock__btn--ghost">Ver como funciona</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </article>
+
+    <div data-reveal="" style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;padding:26px 0 10px;border-top:1px solid rgba(255,255,255,.08)">
+      <span data-en="Also" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:#6E7378;white-space:nowrap">Também</span>
+      <p data-en="Creating and editing 2D floor plans entirely in the browser — native Canvas, no backend, no database." style="margin:0;font-size:15.5px;line-height:1.55;color:#878C91;flex:1;min-width:280px;text-wrap:pretty">Criação/Edição de planta baixa 2D que roda inteiro no navegador — Canvas nativo, sem backend e sem banco.</p>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6E7378;white-space:nowrap">TypeScript · React 19 · Zustand</span>
+    </div>
+
+  </section>
+
+  <section id="consultoria" data-section="" data-pad="" style="position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:110px 40px 40px;border-top:1px solid rgba(255,255,255,.08)">
+    <div data-about-grid="" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:80px;align-items:start">
+      <div data-reveal="">
+        <span data-en="Consulting" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:#878C91">Consultoria</span>
+        <h2 style="margin:18px 0 24px;font-size:clamp(28px,3.6vw,50px);font-weight:600;letter-spacing:-.035em;line-height:1.05;text-wrap:balance">
+          <span data-en="I also help teams">Também ajudo times a</span> <span data-en="build their SaaS" style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#C4F82A">construir seu SaaS</span>
+        </h2>
+        <p data-en="Consulting for SaaS development: architecture, technical decisions and getting the product out the door — whether it's a first version or a system that has outgrown its own foundation." style="margin:0 0 32px;font-size:17px;line-height:1.65;color:#A7ACB1;max-width:50ch;text-wrap:pretty">Consultoria em desenvolvimento de SaaS: arquitetura, decisões técnicas e o caminho até o produto no ar — seja uma primeira versão ou um sistema que já cresceu além da própria base.</p>
+        <ul style="list-style:none;margin:0;padding:0;display:grid;gap:16px;max-width:50ch">
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:16px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span><strong data-en="Architecture" style="color:#F2F3EF;font-weight:600">Arquitetura</strong> <span data-en="— data modelling and technical decisions that hold up as the product grows">— modelagem de dados e decisões técnicas que aguentam o produto crescer</span></span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:16px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span><strong data-en="Technical decisions" style="color:#F2F3EF;font-weight:600">Decisões técnicas</strong> <span data-en="— picking the stack and trade-offs for what the product actually needs">— escolha de stack e trade-offs pro que o produto realmente precisa</span></span></li>
+          <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:16px;line-height:1.5;color:#CFD3D6"><span style="color:#C4F82A;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:3px">→</span><span><strong data-en="Shipped product" style="color:#F2F3EF;font-weight:600">Produto no ar</strong> <span data-en="— from first version to a system that has outgrown its own foundation">— da primeira versão a um sistema que já cresceu além da própria base</span></span></li>
+        </ul>
+      </div>
+      <div data-reveal="" data-delay="120">
+        <span data-en="Client cases" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:#878C91">Cases de cliente</span>
+        <div style="margin-top:22px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:#0E1012;padding:26px 28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:#C4F82A">Ram Soluções Esportivas</span>
+            <span data-en="Data &amp; ML" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#878C91;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 10px;white-space:nowrap">Dados &amp; ML</span>
+          </div>
+          <h3 data-en="DG Oracle — turning gut feeling into a number" style="margin:0 0 14px;font-size:25px;font-weight:600;letter-spacing:-.03em;line-height:1.15;text-wrap:balance">DG Oracle — transformar palpite em número</h3>
+          <p data-en="A prediction engine for double green in sports betting. Mathematical models and machine learning read dozens of contextual signals from each match and collapse them into a single answer: the real probability of the outcome happening." style="margin:0 0 18px;font-size:16px;line-height:1.6;color:#A7ACB1;text-wrap:pretty">Um motor de previsão de duplo green para apostas esportivas. Modelos matemáticos e machine learning leem dezenas de sinais de contexto de cada partida e reduzem tudo a uma única resposta: a probabilidade real do resultado acontecer.</p>
+          <p data-en="Instead of a spreadsheet of loose indicators, the team got a score they can act on — delivered both on the web app and through a WhatsApp chatbot." style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#A7ACB1;text-wrap:pretty">No lugar de uma planilha de indicadores soltos, o time passou a ter um número em que dá pra agir — entregue tanto no site quanto por um chatbot no WhatsApp.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Machine Learning</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Modelagem estatística</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Python</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Node.js</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">React</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Baileys</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:#0E1012;padding:26px 28px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:#C4F82A">Nordis - Consultoria </span>
+            <span data-en="SaaS consulting" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#878C91;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:4px 10px;white-space:nowrap">Consultoria SaaS</span>
+          </div>
+          <h3 data-en="Travel consulting" style="margin:0 0 14px;font-size:25px;font-weight:600;letter-spacing:-.03em;line-height:1.15;text-wrap:balance">Consultoria de viagens</h3>
+          <p data-en="A SaaS that builds travel itineraries. I worked on the scalability strategy, on the core logic, and on the design of the landing page and a custom dashboard — so the product could grow without rewriting its foundation." style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#A7ACB1;text-wrap:pretty">Um SaaS que monta roteiros de viagem. Atuei na estratégia de escalabilidade, na lógica central e no design da landing page e de um painel customizado — para o produto crescer sem precisar refazer a base.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span data-en="Scalability" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Escalabilidade</span>
+            <span data-en="Product logic" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Lógica de produto</span>
+            <span data-en="Landing page" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Landing page</span>
+            <span data-en="Custom dashboard" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#878C91;border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 11px">Painel customizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre" data-section="" data-pad="" style="position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:110px 40px 40px;border-top:1px solid rgba(255,255,255,.08)">
+    <div data-about-grid="" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:80px;align-items:start">
+      <div data-reveal="">
+        <span data-en="About" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:#878C91">Sobre</span>
+        <h2 style="margin:18px 0 24px;font-size:clamp(28px,3.6vw,50px);font-weight:600;letter-spacing:-.035em;line-height:1.05;text-wrap:balance">
+          <span data-en="Backend engineer with">Engenheiro de backend com</span> <span data-en="an obsession for the interface" style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#C4F82A">obsessão pela interface</span>
+        </h2>
+        <p data-en="I've been writing code since 2017 and freelancing since 2021, always on the whole stack: I model the database, design the API, build the front end and ship it. What I like is owning the product decision, not just the ticket." style="margin:0 0 18px;font-size:17px;line-height:1.65;color:#A7ACB1;max-width:50ch;text-wrap:pretty">Escrevo código desde 2017 e sou freelancer desde 2021, sempre no stack inteiro: modelo o banco, desenho a API, construo o front e coloco no ar. O que me move é ser dono da decisão de produto, não só da tarefa.</p>
+        <p data-en="Since 2025 I've been a full-stack developer at Moodar, building B2B solutions focused on mental health — and I keep shipping my own products on the side." style="margin:0;font-size:17px;line-height:1.65;color:#A7ACB1;max-width:50ch;text-wrap:pretty">Desde 2025 sou desenvolvedor full-stack na Moodar, construindo soluções B2B com ênfase em saúde mental — e sigo tocando produtos próprios em paralelo.</p>
+      </div>
+      <div data-reveal="" data-delay="120">
+        <span data-en="Path" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:#878C91">Trajetória</span>
+        <div class="timeline-wrap" style="position:relative;margin-top:26px">
+          <div style="position:absolute;left:70px;top:8px;bottom:14px;width:1px;background:rgba(255,255,255,.11)"></div>
+          <div data-spine="" style="position:absolute;left:70px;top:8px;width:1px;background:linear-gradient(180deg,#C4F82A,rgba(196,248,42,.25))"></div>
+
+          <div data-node="" style="position:relative;display:grid;grid-template-columns:70px 1fr;gap:26px;padding:0 0 30px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#878C91;padding-top:2px;text-align:right;padding-right:14px">2017</span>
+            <span style="position:absolute;left:65px;top:6px;width:9px;height:9px;border-radius:50%;border:1px solid rgba(196,248,42,.55);background:#08090A"></span>
+            <div style="padding-left:4px">
+              <div data-en="First contact with code" style="font-size:16px;font-weight:600;margin-bottom:4px">Primeiro contato com código</div>
+              <div data-en="High school, building games and apps" style="font-size:14px;color:#878C91;line-height:1.5">Ensino médio, com foco em jogos e aplicativos</div>
+            </div>
+          </div>
+
+          <div data-node="" style="position:relative;display:grid;grid-template-columns:70px 1fr;gap:26px;padding:0 0 30px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#878C91;padding-top:2px;text-align:right;padding-right:14px">2021</span>
+            <span style="position:absolute;left:65px;top:6px;width:9px;height:9px;border-radius:50%;border:1px solid rgba(196,248,42,.55);background:#08090A"></span>
+            <div style="padding-left:4px">
+              <div data-en="Freelance developer" style="font-size:16px;font-weight:600;margin-bottom:4px">Desenvolvedor freelancer</div>
+              <div data-en="Full-stack projects for clients, end to end" style="font-size:14px;color:#878C91;line-height:1.5">Projetos full-stack para clientes, de ponta a ponta</div>
+            </div>
+          </div>
+
+          <div data-node="" style="position:relative;display:grid;grid-template-columns:70px 1fr;gap:26px;padding:0 0 30px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#878C91;padding-top:2px;text-align:right;padding-right:14px">2022—24</span>
+            <span style="position:absolute;left:65px;top:6px;width:9px;height:9px;border-radius:50%;border:1px solid rgba(196,248,42,.55);background:#08090A"></span>
+            <div style="padding-left:4px">
+              <div data-en="Computer Engineering — UFPB" style="font-size:16px;font-weight:600;margin-bottom:4px">Engenharia da Computação — UFPB</div>
+              <div data-en="Incomplete" style="font-size:14px;color:#878C91;line-height:1.5">Incompleto</div>
+            </div>
+          </div>
+
+          <div data-node="" style="position:relative;display:grid;grid-template-columns:70px 1fr;gap:26px;padding:0 0 30px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#878C91;padding-top:2px;text-align:right;padding-right:14px">2025—</span>
+            <span style="position:absolute;left:65px;top:6px;width:9px;height:9px;border-radius:50%;border:1px solid rgba(196,248,42,.55);background:#08090A"></span>
+            <div style="padding-left:4px">
+              <div data-en="Systems Development — UNIPÊ" style="font-size:16px;font-weight:600;margin-bottom:4px">Desenvolvimento de Sistemas — UNIPÊ</div>
+              <div data-en="In progress" style="font-size:14px;color:#878C91;line-height:1.5">Em andamento</div>
+            </div>
+          </div>
+
+          <div data-node="" style="position:relative;display:grid;grid-template-columns:70px 1fr;gap:26px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#C4F82A;padding-top:16px;text-align:right;padding-right:14px">2025—</span>
+            <span style="position:absolute;left:64px;top:19px;width:13px;height:13px;border-radius:50%;background:#C4F82A;box-shadow:0 0 0 4px rgba(196,248,42,.14);animation:om-pulse 2.6s ease-in-out infinite"></span>
+            <div style="margin-left:4px;border:1px solid rgba(196,248,42,.28);background:#0E1012;border-radius:14px;padding:16px 18px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px">
+                <a href="https://www.moodar.com.br/" target="_blank" data-en="Full-stack developer — Moodar" style="font-size:16px;font-weight:600">Desenvolvedor full-stack — Moodar</a>
+                <span data-en="Current" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#08090A;background:#C4F82A;border-radius:999px;padding:4px 9px;white-space:nowrap">Atual</span>
+              </div>
+              <div data-en="B2B solutions with a focus on mental health" style="font-size:14px;color:#878C91;line-height:1.5">Soluções B2B com ênfase em saúde mental</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato" data-section="" data-pad="" style="position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:120px 40px 60px">
+    <div data-reveal="" style="border:1px solid rgba(255,255,255,.1);border-radius:26px;background:linear-gradient(180deg,#0E1012,#0A0B0C);padding:clamp(32px,5vw,72px)">
+      <span data-en="Contact" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:#C4F82A">Contato</span>
+      <h2 style="margin:20px 0 22px;font-size:clamp(34px,5.6vw,78px);font-weight:600;letter-spacing:-.04em;line-height:1;text-wrap:balance">
+        <span data-en="Got a product">Tem um produto</span> <span data-en="to build?" style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#C4F82A">para construir?</span>
+      </h2>
+      <p data-en="Tell me what you have in mind, I'll get back to you as soon as I can." style="margin:0 0 40px;font-size:18px;line-height:1.6;color:#A7ACB1;max-width:44ch">Me conta o que você tem em mente, responderei assim que possível.</p>
+      <div data-contact-links="" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+        <a href="mailto:joaov.andrade.dev@gmail.com" data-magnetic="" class="card-email" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;border-radius:16px;background:#C4F82A;color:#08090A">
+          <span><span data-en="Email" style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.65">E-mail</span><span style="font-size:14.5px;font-weight:600;word-break:break-all">joaov.andrade.dev@gmail.com</span></span>
+          <span style="font-family:'JetBrains Mono',monospace">↗</span>
+        </a>
+        <a href="https://github.com/JoaoAndrad" target="_blank" data-magnetic="" class="card-ghost" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;border-radius:16px;border:1px solid rgba(255,255,255,.14)">
+          <span><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#878C91">GitHub</span><span style="font-size:16px;font-weight:600">@JoaoAndrad</span></span>
+          <span style="font-family:'JetBrains Mono',monospace">↗</span>
+        </a>
+        <a href="https://www.linkedin.com/in/andradevjoao/" target="_blank" data-magnetic="" class="card-ghost" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;border-radius:16px;border:1px solid rgba(255,255,255,.14)">
+          <span><span style="display:block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#878C91">LinkedIn</span><span style="font-size:16px;font-weight:600">/in/andradevjoao</span></span>
+          <span style="font-family:'JetBrains Mono',monospace">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer data-footer="" data-pad="" style="position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:28px 40px 48px;display:flex;align-items:center;justify-content:space-between;gap:20px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#6E7378">
+    <span>© 2026 João Andrade</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var root = document.getElementById('root');
+  var spot = document.getElementById('spotlight');
+  var menu = document.getElementById('mobileMenu');
+  var menuBtn = document.getElementById('menuBtn');
+  var btnPT = document.getElementById('btnPT');
+  var btnEN = document.getElementById('btnEN');
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wideQuery = window.matchMedia('(min-width: 900px)');
+  var lang = 'pt';
+  var menuOpen = false;
+
+  function isWide() { return wideQuery.matches; }
+
+  // ---- Language toggle ----
+  function applyLang() {
+    document.querySelectorAll('[data-en]').forEach(function (el) {
+      if (!el.dataset.pt) el.dataset.pt = el.textContent;
+      var next = lang === 'en' ? el.dataset.en : el.dataset.pt;
+      if (el.textContent !== next) el.textContent = next;
+    });
+    document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+  }
+  function paintToggle() {
+    var on = { background: '#C4F82A', color: '#08090A' };
+    var off = { background: 'transparent', color: '#878C91' };
+    Object.assign(btnPT.style, lang === 'pt' ? on : off);
+    Object.assign(btnEN.style, lang === 'en' ? on : off);
+  }
+  function setLang(l) { lang = l; applyLang(); paintToggle(); }
+  btnPT.addEventListener('click', function () { setLang('pt'); });
+  btnEN.addEventListener('click', function () { setLang('en'); });
+
+  var forcedNav = (navigator.language || 'pt').toLowerCase();
+  lang = forcedNav.startsWith('pt') ? 'pt' : 'en';
+  applyLang();
+  paintToggle();
+
+  // ---- Mobile menu ----
+  function toggleMenu() {
+    menuOpen = !menuOpen;
+    menu.style.display = menuOpen ? 'flex' : 'none';
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+  }
+  function closeMenu() {
+    menuOpen = false;
+    menu.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  menuBtn.addEventListener('click', toggleMenu);
+  menu.querySelectorAll('.menu-link').forEach(function (a) { a.addEventListener('click', closeMenu); });
+
+  if (reduced) {
+    document.querySelectorAll('[style*="om-marquee"],[style*="om-pulse"]').forEach(function (el) { el.style.animation = 'none'; });
+  }
+
+  // ---- Reveal on scroll ----
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  function show(el) {
+    var delay = parseInt(el.dataset.delay || '0', 10);
+    el.classList.remove('is-hidden');
+    if (el.hasAttribute('data-magnetic')) {
+      setTimeout(function () { el.dataset.revealed = '1'; }, delay + 950);
+    }
+  }
+
+  document.querySelectorAll('[data-reveal]').forEach(function (el) {
+    if (reduced) { return; }
+    var delay = parseInt(el.dataset.delay || '0', 10);
+    el.classList.add('is-hidden');
+    el.style.transitionDelay = delay + 'ms';
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight * 0.92) show(el);
+    else io.observe(el);
+  });
+
+  document.querySelectorAll('[data-magnetic]:not([data-reveal])').forEach(function (el) {
+    el.dataset.revealed = '1';
+  });
+
+  // ---- Timeline draw-in ----
+  // NOTE: we observe the wrapper (real height), not the spine itself —
+  // the spine starts at height:0 and a zero-area IntersectionObserver
+  // target never reliably reports isIntersecting, which left the
+  // timeline stuck empty.
+  var timelineIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var spine = e.target.querySelector('[data-spine]');
+        if (spine) runTimeline(spine);
+        timelineIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  function runTimeline(spine) {
+    var wrap = spine.parentElement;
+    var nodes = wrap.querySelectorAll('[data-node]');
+    spine.style.height = Math.max(0, wrap.offsetHeight - 22) + 'px';
+    nodes.forEach(function (n, i) {
+      setTimeout(function () { n.classList.add('is-visible'); }, 220 + i * 150);
+    });
+  }
+
+  document.querySelectorAll('[data-spine]').forEach(function (spine) {
+    var wrap = spine.parentElement;
+    var r = wrap.getBoundingClientRect();
+    if (r.top < window.innerHeight * 0.85) runTimeline(spine);
+    else timelineIO.observe(wrap);
+  });
+
+  // ---- DogBot mockup: looping chat script (reused from the real landing page) ----
+  var DOGBOT_SCRIPT = [
+    { user: true, text: "Gastei R$ 45 no mercado 🛒" },
+    { bot: true, text: "✅ Anotado! Você já gastou R$ 320 em Mercado este mês. Restam R$ 180 do limite." },
+    { user: true, text: "Me lembra de pagar o aluguel dia 5 💸" },
+    { bot: true, text: "⏰ Feito! Lembrete criado pro dia 5 de todo mês." },
+    { user: true, text: "Bota 'Blinding Lights' na fila 🎵" },
+    { bot: true, text: "🎶 Adicionei à fila colaborativa. A galera já pode votar 👍👎" },
+    { user: true, text: "Registrei 5km de corrida hoje 🏃" },
+    { bot: true, text: "💪 Boa! São 18km na semana. Meta: 25km." },
+    { user: true, text: "Quais meus lembretes de hoje? 📅" },
+    { bot: true, text: "🔔 3 hoje: remédio 8h, dentista 15h, treino 19h." }
+  ];
+
+  (function initHermWordCycle() {
+    // A single element whose text we swap, instead of the CSS "stack all
+    // three words via grid-area" trick — that approach sizes the box to
+    // the widest word ("respondendo"), leaving a gap after shorter ones
+    // once the line is centered/tight. Swapping the actual text keeps the
+    // box exactly as wide as whatever word is showing, at any size.
+    var el = document.getElementById('hermWordCycle');
+    if (!el) return;
+    var words = ['vendendo', 'agendando', 'respondendo'];
+    var i = 0;
+    setInterval(function () {
+      el.classList.add('is-fading');
+      setTimeout(function () {
+        i = (i + 1) % words.length;
+        el.textContent = words[i];
+        el.classList.remove('is-fading');
+      }, 300);
+    }, 3200);
+  })();
+
+  (function initDogbotChat() {
+    // Never wipes the thread — new bubbles just push older ones out the
+    // top (overflow:hidden + justify-content:flex-end on the body), so
+    // the card's size stays fixed and never shows an empty gap.
+    var body = document.getElementById('dogbotChat');
+    if (!body) return;
+    var KEEP = 20; // DOM cap, far above what's ever visible
+
+    function trim() { while (body.children.length > KEEP) body.removeChild(body.firstChild); }
+
+    function renderMsg(msg, animate) {
+      var el = document.createElement('div');
+      el.className = 'dogbot-mock__bubble ' + (msg.user ? 'dogbot-mock__bubble--user' : 'dogbot-mock__bubble--bot');
+      if (animate === false) el.style.animation = 'none';
+      el.textContent = msg.text;
+      body.appendChild(el);
+      trim();
+    }
+
+    var PREFILL = 6;
+    for (var p = 0; p < PREFILL; p++) renderMsg(DOGBOT_SCRIPT[p % DOGBOT_SCRIPT.length], false);
+
+    if (reduced) return;
+
+    var idx = PREFILL % DOGBOT_SCRIPT.length;
+    var timer;
+    function tick() {
+      var msg = DOGBOT_SCRIPT[idx];
+      if (msg.bot) {
+        var t = document.createElement('div');
+        t.className = 'dogbot-mock__typing';
+        t.innerHTML = '<span></span><span></span><span></span>';
+        body.appendChild(t);
+        trim();
+        timer = setTimeout(function () {
+          if (t.parentNode) t.remove();
+          renderMsg(msg, true);
+          idx = (idx + 1) % DOGBOT_SCRIPT.length;
+          timer = setTimeout(tick, 1500);
+        }, 1100);
+      } else {
+        renderMsg(msg, true);
+        idx = (idx + 1) % DOGBOT_SCRIPT.length;
+        timer = setTimeout(tick, 1300);
+      }
+    }
+    timer = setTimeout(tick, 1200);
+  })();
+
+  // ---- Spotlight + magnetic buttons + media parallax ----
+  var pointer = { x: -9999, y: -9999 };
+  var raf = null;
+
+  function frame() {
+    raf = null;
+    if (reduced) return;
+    var wide = isWide();
+    var px = pointer.x, py = pointer.y;
+    var vh = window.innerHeight;
+
+    if (spot) {
+      if (wide && px > -9000) {
+        spot.style.opacity = '1';
+        spot.style.background = 'radial-gradient(440px circle at ' + px + 'px ' + py + 'px, rgba(196,248,42,.085), transparent 70%)';
+      } else spot.style.opacity = '0';
+    }
+
+    document.querySelectorAll('[data-magnetic]').forEach(function (el) {
+      if (!wide || el.dataset.revealed !== '1') { el.style.translate = ''; return; }
+      var r = el.getBoundingClientRect();
+      var dx = px - (r.left + r.width / 2);
+      var dy = py - (r.top + r.height / 2);
+      var reach = Math.max(140, r.width * 0.75);
+      var d = Math.hypot(dx, dy);
+      if (d < reach) {
+        var f = (1 - d / reach) * 0.22;
+        el.style.translate = (dx * f).toFixed(1) + 'px ' + (dy * f).toFixed(1) + 'px';
+      } else el.style.translate = '0px 0px';
+    });
+
+    document.querySelectorAll('[data-media]').forEach(function (el) {
+      if (!wide) { el.style.transform = ''; return; }
+      var r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      var inside = px >= r.left && px <= r.right && py >= r.top && py <= r.bottom;
+      if (inside) {
+        var nx = (px - (r.left + r.width / 2)) / (r.width / 2);
+        var ny = (py - (r.top + r.height / 2)) / (r.height / 2);
+        el.style.transform = 'perspective(900px) rotateY(' + (nx * 3.2).toFixed(2) + 'deg) rotateX(' + (ny * -3.2).toFixed(2) + 'deg)';
+      } else if (el.style.transform) {
+        el.style.transform = '';
+      }
+    });
+  }
+  function requestFrame() { if (!raf) raf = requestAnimationFrame(frame); }
+
+  if (!reduced) {
+    window.addEventListener('mousemove', function (e) {
+      pointer.x = e.clientX; pointer.y = e.clientY;
+      requestFrame();
+    }, { passive: true });
+    window.addEventListener('scroll', requestFrame, { passive: true });
+  }
+})();
+</script>
+</body>
+</html>
