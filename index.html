@@ -25,6 +25,9 @@
   [data-log-scroll]::-webkit-scrollbar { width: 5px; }
   [data-log-scroll]::-webkit-scrollbar-track { background: transparent; }
   [data-log-scroll]::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; }
+  [data-media] { transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .4s; -webkit-user-select: none; user-select: none; }
+  [data-media]:hover { border-color: var(--ink-faint); }
+  [data-media], [data-media] img, [data-media] a { -webkit-user-drag: none; user-drag: none; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   [data-bar] a[href]:not([data-bar-brand]):hover { color: var(--ink); }
   #chips button:hover { color: var(--ink); }
@@ -45,10 +48,10 @@
     [data-sobre-split] [style*="grid-area:eyebrow"] { margin-bottom: 0 !important; }
     [data-sobre-split] [style*="grid-area:body"] { padding-top: 0 !important; }
     [data-msg] { max-width: 90% !important; font-size: 15px !important; }
-    [data-tl] { grid-template-columns: 58px 1fr !important; gap: 18px !important; }
+    [data-tl] { grid-template-columns: 58px 1fr !important; gap: 0 18px !important; }
     #contact-links { grid-template-columns: 1fr !important; }
-    #dogbot [data-split] > *:first-child { order: 2; }
-    #dogbot [data-split] > *:last-child { order: 1; }
+    #greenlightflow [data-split] > *:first-child { order: 2; }
+    #greenlightflow [data-split] > *:last-child { order: 1; }
   }
 
   /* ---- Recreated product mockups (browser-frame chrome) ---- */
@@ -193,8 +196,8 @@
   <a href="#conversa" data-bar-brand="">João Andrade — Engenheiro de Software</a>
   <nav data-bar-nav="" style="display:flex;gap:24px;color:var(--ink-faint)">
     <a href="#herm">Herm</a>
-    <a href="#dogbot">DogBot</a>
     <a href="#greenlightflow">GreenLightFlow</a>
+    <a href="#dogbot">DogBot</a>
     <a href="#consultoria">Consultoria</a>
     <a href="#sobre">Sobre</a>
     <a href="#contato">Contato</a>
@@ -235,7 +238,7 @@
         <span style="flex:1;height:1px;background:var(--line)"></span>
         <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--bg);background:var(--ink);border-radius:999px;padding:5px 11px;white-space:nowrap">Co-founder &amp; CTO</span>
       </div>
-      <h2 style="margin:0 0 12px;font-size:clamp(40px,5.2vw,68px);line-height:1.02;font-weight:600;letter-spacing:-.035em">Herm</h2>
+      <h2 style="margin:0 0 12px;font-size:clamp(40px,5.2vw,68px);line-height:1.02;font-weight:600;letter-spacing:-.035em;display:flex;align-items:center;gap:16px"><img src="assets/logos/herm-logo.svg" alt="" style="width:.85em;height:.85em;object-fit:contain;flex-shrink:0">Herm</h2>
       <p style="margin:0 0 24px;font-style:italic;font-size:20px;color:var(--ink-soft)">Plataforma B2B de chatbots para empresas</p>
       <p style="margin:0 0 26px;font-size:17.5px;line-height:1.6;color:var(--ink-soft);max-width:46ch;text-wrap:pretty">Cada bot individual atende, vende e agenda automaticamente através dos canais de comunicação da empresa.</p>
       <ul style="list-style:none;margin:0 0 28px;padding:0;display:grid;gap:13px;max-width:48ch">
@@ -249,7 +252,7 @@
       </div>
       <a href="https://hermflow.com/" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 26px;background:var(--ink);color:var(--bg);font-size:15.5px;font-weight:600">Abrir hermflow.com ↗</a>
     </div>
-    <div class="herm-card-media" style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;box-shadow:0 18px 50px var(--shadow);aspect-ratio:4/3">
+    <div data-media="" class="herm-card-media" style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;box-shadow:0 18px 50px var(--shadow);aspect-ratio:4/3">
       <div class="browser-frame">
         <div class="browser-body">
           <div class="herm-mock">
@@ -353,71 +356,9 @@
   </div>
 </section>
 
-<section id="dogbot" data-theme="0" data-sec="" style="min-height:100vh;box-sizing:border-box;display:flex;align-items:center;color:var(--ink);padding:18vh 40px">
+<section id="greenlightflow" data-theme="0" data-sec="" style="min-height:100vh;box-sizing:border-box;display:flex;align-items:center;color:var(--ink);padding:18vh 40px">
   <div data-split="" style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1fr);gap:60px;align-items:center;width:100%">
-    <div style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;height:430px;display:flex;flex-direction:column;box-shadow:0 18px 50px var(--shadow)">
-      <div class="browser-frame">
-        <div class="browser-body">
-          <div class="dogbot-mock">
-            <div class="dogbot-mock__header">
-              <div class="dogbot-mock__avatar"><img src="assets/logos/dogbot-logo.svg" alt="" style="width:15px;height:15px;object-fit:contain"></div>
-              <div>
-                <div style="font-weight:700;font-size:13.5px;color:#F4F7FF">DogBot</div>
-                <div style="font-size:10.5px;color:#5CE58F;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#25D366"></span>online agora</div>
-              </div>
-            </div>
-            <div class="dogbot-mock__body" id="dogbotChat"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)">02</span>
-        <span style="flex:1;height:1px;background:var(--line)"></span>
-      </div>
-      <h2 style="margin:0 0 12px;font-size:clamp(40px,5.2vw,68px);line-height:1.02;font-weight:600;letter-spacing:-.035em">DogBot</h2>
-      <p style="margin:0 0 24px;font-style:italic;font-size:20px;color:var(--ink-soft)">Assistente pessoal multifuncional no WhatsApp</p>
-      <p style="margin:0 0 26px;font-size:17.5px;line-height:1.6;color:var(--ink-soft);max-width:46ch;text-wrap:pretty">Organizado em módulos independentes, com painel administrativo próprio em React e um app companion com bolha flutuante para Windows e Android.</p>
-      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:28px">
-        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Financeiro</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Contas, cartões e orçamentos com comandos em linguagem natural via IA</div></div>
-        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Rotinas</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Lembretes recorrentes individuais ou em grupo</div></div>
-        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">DogLog</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Diário de filmes e livros com listas colaborativas</div></div>
-        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Spotify</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Sessões de Jam, votação de faixas e estatísticas</div></div>
-        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Esportes</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Bolão da Copa do Mundo e integração com o Cartola FC</div></div>
-        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Fitness</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Registro de treino com ranking e streak por grupo</div></div>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:26px;padding-top:20px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:28px">
-        <span>Node.js</span><span>React</span><span>PostgreSQL</span><span>Prisma</span><span>Flutter</span>
-      </div>
-      <a href="https://dogbot.squareweb.app/admin/spa/" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 26px;background:var(--ink);color:var(--bg);font-size:15.5px;font-weight:600">Ver o DogBot ↗</a>
-    </div>
-  </div>
-</section>
-
-<section id="greenlightflow" data-theme="1" data-sec="" style="min-height:100vh;box-sizing:border-box;display:flex;align-items:center;color:var(--ink);padding:18vh 40px">
-  <div data-split="" style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:60px;align-items:center;width:100%">
-    <div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)">03</span>
-        <span style="flex:1;height:1px;background:var(--line)"></span>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--bg);background:var(--ink);border-radius:999px;padding:5px 11px;white-space:nowrap">Fundador &amp; dev principal</span>
-      </div>
-      <h2 style="margin:0 0 12px;font-size:clamp(36px,4.6vw,60px);line-height:1.02;font-weight:600;letter-spacing:-.035em">GreenLightFlow</h2>
-      <p style="margin:0 0 24px;font-style:italic;font-size:20px;color:var(--ink-soft)">SaaS de agendamento para redes sociais</p>
-      <p style="margin:0 0 26px;font-size:17.5px;line-height:1.6;color:var(--ink-soft);max-width:46ch;text-wrap:pretty">Construído do zero para agências e criadores que gerenciam várias contas ao mesmo tempo.</p>
-      <ul style="list-style:none;margin:0 0 28px;padding:0;display:grid;gap:13px;max-width:48ch">
-        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Publicação em Instagram, YouTube, TikTok e LinkedIn, múltiplas contas por provedor</span></li>
-        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Fluxo editorial completo por agendamento</span></li>
-        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Sistema de armazenamento de mídia próprio usando S3 e Blobs</span></li>
-        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Corte e edições básicas de imagem no navegador, sem custo de processamento no servidor</span></li>
-      </ul>
-      <div style="display:flex;flex-wrap:wrap;gap:26px;padding-top:20px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:28px">
-        <span>Node.js</span><span>Express</span><span>TypeScript</span><span>React</span><span>Prisma</span><span>PostgreSQL</span>
-      </div>
-      <a href="http://greenlightflow.com/" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 26px;background:var(--ink);color:var(--bg);font-size:15.5px;font-weight:600">Abrir greenlightflow.com ↗</a>
-    </div>
-    <div style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;height:430px;display:flex;flex-direction:column;box-shadow:0 18px 50px var(--shadow)">
+    <div data-media="" style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;height:430px;display:flex;flex-direction:column;box-shadow:0 18px 50px var(--shadow)">
       <div class="browser-frame">
         <div class="browser-body">
           <div class="glf-mock">
@@ -454,6 +395,68 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)">02</span>
+        <span style="flex:1;height:1px;background:var(--line)"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--bg);background:var(--ink);border-radius:999px;padding:5px 11px;white-space:nowrap">Fundador &amp; dev principal</span>
+      </div>
+      <h2 style="margin:0 0 12px;font-size:clamp(36px,4.6vw,60px);line-height:1.02;font-weight:600;letter-spacing:-.035em;display:flex;align-items:center;gap:16px"><img src="assets/logos/glf-logo.png" alt="" style="width:.85em;height:.85em;object-fit:contain;flex-shrink:0;border-radius:50%">GreenLightFlow</h2>
+      <p style="margin:0 0 24px;font-style:italic;font-size:20px;color:var(--ink-soft)">SaaS de agendamento para redes sociais</p>
+      <p style="margin:0 0 26px;font-size:17.5px;line-height:1.6;color:var(--ink-soft);max-width:46ch;text-wrap:pretty">Construído do zero para agências e criadores que gerenciam várias contas ao mesmo tempo.</p>
+      <ul style="list-style:none;margin:0 0 28px;padding:0;display:grid;gap:13px;max-width:48ch">
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Publicação em Instagram, YouTube, TikTok e LinkedIn, múltiplas contas por provedor</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Fluxo editorial completo por agendamento</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Sistema de armazenamento de mídia próprio usando S3 e Blobs</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:14px;align-items:start;font-size:15px;line-height:1.5;color:var(--ink-soft)"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px;color:var(--ink-faint)">→</span><span>Corte e edições básicas de imagem no navegador, sem custo de processamento no servidor</span></li>
+      </ul>
+      <div style="display:flex;flex-wrap:wrap;gap:26px;padding-top:20px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:28px">
+        <span>Node.js</span><span>Express</span><span>TypeScript</span><span>React</span><span>Prisma</span><span>PostgreSQL</span>
+      </div>
+      <a href="http://greenlightflow.com/" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 26px;background:var(--ink);color:var(--bg);font-size:15.5px;font-weight:600">Abrir greenlightflow.com ↗</a>
+    </div>
+  </div>
+</section>
+
+<section id="dogbot" data-theme="1" data-sec="" style="min-height:100vh;box-sizing:border-box;display:flex;align-items:center;color:var(--ink);padding:18vh 40px">
+  <div data-split="" style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:60px;align-items:center;width:100%">
+    <div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)">03</span>
+        <span style="flex:1;height:1px;background:var(--line)"></span>
+      </div>
+      <h2 style="margin:0 0 12px;font-size:clamp(40px,5.2vw,68px);line-height:1.02;font-weight:600;letter-spacing:-.035em;display:flex;align-items:center;gap:16px"><img src="assets/logos/dogbot-logo.svg" alt="" style="width:.85em;height:.85em;object-fit:contain;flex-shrink:0">DogBot</h2>
+      <p style="margin:0 0 24px;font-style:italic;font-size:20px;color:var(--ink-soft)">Assistente pessoal multifuncional no WhatsApp</p>
+      <p style="margin:0 0 26px;font-size:17.5px;line-height:1.6;color:var(--ink-soft);max-width:46ch;text-wrap:pretty">Organizado em módulos independentes, com painel administrativo próprio em React e um app companion com bolha flutuante para Windows e Android.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:28px">
+        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Financeiro</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Contas, cartões e orçamentos com comandos em linguagem natural via IA</div></div>
+        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Rotinas</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Lembretes recorrentes individuais ou em grupo</div></div>
+        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">DogLog</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Diário de filmes e livros com listas colaborativas</div></div>
+        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Spotify</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Sessões de Jam, votação de faixas e estatísticas</div></div>
+        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Esportes</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Bolão da Copa do Mundo e integração com o Cartola FC</div></div>
+        <div style="background:var(--surface);padding:14px 16px"><div style="font-size:13.5px;font-weight:600;margin-bottom:4px">Fitness</div><div style="font-size:12px;line-height:1.45;color:var(--ink-faint)">Registro de treino com ranking e streak por grupo</div></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:26px;padding-top:20px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:28px">
+        <span>Node.js</span><span>React</span><span>PostgreSQL</span><span>Prisma</span><span>Flutter</span>
+      </div>
+      <a href="https://dogbot.squareweb.app/admin/spa/" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 26px;background:var(--ink);color:var(--bg);font-size:15.5px;font-weight:600">Ver o DogBot ↗</a>
+    </div>
+    <div data-media="" style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;height:430px;display:flex;flex-direction:column;box-shadow:0 18px 50px var(--shadow)">
+      <div class="browser-frame">
+        <div class="browser-body">
+          <div class="dogbot-mock">
+            <div class="dogbot-mock__header">
+              <div class="dogbot-mock__avatar"><img src="assets/logos/dogbot-logo.svg" alt="" style="width:15px;height:15px;object-fit:contain"></div>
+              <div>
+                <div style="font-weight:700;font-size:13.5px;color:#F4F7FF">DogBot</div>
+                <div style="font-size:10.5px;color:#5CE58F;display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:#25D366"></span>online agora</div>
+              </div>
+            </div>
+            <div class="dogbot-mock__body" id="dogbotChat"></div>
           </div>
         </div>
       </div>
@@ -545,31 +548,36 @@
 
       <div data-tl="" style="display:grid;grid-template-columns:72px 1fr;gap:0 26px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);text-align:right;padding:2px 0 30px">2017</span>
-        <div style="padding:0 0 30px 20px;border-left:1px solid var(--line)">
+        <div style="position:relative;padding:0 0 30px 20px;border-left:1px solid var(--line)">
+          <span style="position:absolute;left:-5px;top:1px;width:9px;height:9px;border-radius:50%;border:1px solid var(--line-2);background:var(--bg)"></span>
           <div style="font-size:16.5px;font-weight:600;margin-bottom:4px">Primeiro contato com código</div>
           <div style="font-size:14.5px;color:var(--ink-faint);line-height:1.5">Ensino médio integrado ao técnico de programação.</div>
         </div>
 
         <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);text-align:right;padding:2px 0 30px">2021</span>
-        <div style="padding:0 0 30px 20px;border-left:1px solid var(--line)">
+        <div style="position:relative;padding:0 0 30px 20px;border-left:1px solid var(--line)">
+          <span style="position:absolute;left:-5px;top:1px;width:9px;height:9px;border-radius:50%;border:1px solid var(--line-2);background:var(--bg)"></span>
           <div style="font-size:16.5px;font-weight:600;margin-bottom:4px">Desenvolvedor freelancer</div>
           <div style="font-size:14.5px;color:var(--ink-faint);line-height:1.5">Projetos full-stack para clientes, de ponta a ponta</div>
         </div>
 
         <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);text-align:right;padding:2px 0 30px">2022—24</span>
-        <div style="padding:0 0 30px 20px;border-left:1px solid var(--line)">
+        <div style="position:relative;padding:0 0 30px 20px;border-left:1px solid var(--line)">
+          <span style="position:absolute;left:-5px;top:1px;width:9px;height:9px;border-radius:50%;border:1px solid var(--line-2);background:var(--bg)"></span>
           <div style="font-size:16.5px;font-weight:600;margin-bottom:4px">Engenharia da Computação — UFPB</div>
           <div style="font-size:14.5px;color:var(--ink-faint);line-height:1.5">Incompleto</div>
         </div>
 
         <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-faint);text-align:right;padding:2px 0 30px">2025—</span>
-        <div style="padding:0 0 30px 20px;border-left:1px solid var(--line)">
+        <div style="position:relative;padding:0 0 30px 20px;border-left:1px solid var(--line)">
+          <span style="position:absolute;left:-5px;top:1px;width:9px;height:9px;border-radius:50%;border:1px solid var(--line-2);background:var(--bg)"></span>
           <div style="font-size:16.5px;font-weight:600;margin-bottom:4px">Desenvolvimento de Sistemas — UNIPÊ</div>
           <div style="font-size:14.5px;color:var(--ink-faint);line-height:1.5">Em andamento</div>
         </div>
 
         <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink);text-align:right;padding:18px 0 0">2025—</span>
-        <div style="padding:0 0 0 20px;border-left:1px solid var(--line)">
+        <div style="position:relative;padding:0 0 0 20px;border-left:1px solid var(--line)">
+          <span style="position:absolute;left:-6px;top:14px;width:11px;height:11px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 4px var(--surface);animation:om-pulse 2.6s ease-in-out infinite"></span>
           <div style="border:1px solid var(--line-2);background:var(--surface);padding:16px 18px">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px">
               <a href="https://www.moodar.com.br/" target="_blank" rel="noopener noreferrer" style="font-size:16.5px;font-weight:600">Engenheiro de Software — Moodar</a>
@@ -903,6 +911,46 @@
     }
     timer = setTimeout(tick, 1200);
   })();
+})();
+
+(function initMediaTilt() {
+  // Leve tilt 3D nos mocks de produto, seguindo o mouse — mesmo efeito do design
+  // anterior. Só desktop (evita custo/estranheza em touch) e nunca se o usuário
+  // pedir menos movimento.
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wideQuery = window.matchMedia('(min-width: 900px)');
+  if (reduced) return;
+
+  var pointer = { x: -9999, y: -9999 };
+  var raf = null;
+
+  function frame() {
+    raf = null;
+    var wide = wideQuery.matches;
+    var px = pointer.x, py = pointer.y;
+    var vh = window.innerHeight;
+
+    document.querySelectorAll('[data-media]').forEach(function (el) {
+      if (!wide) { el.style.transform = ''; return; }
+      var r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      var inside = px >= r.left && px <= r.right && py >= r.top && py <= r.bottom;
+      if (inside) {
+        var nx = (px - (r.left + r.width / 2)) / (r.width / 2);
+        var ny = (py - (r.top + r.height / 2)) / (r.height / 2);
+        el.style.transform = 'perspective(900px) rotateY(' + (nx * 3.2).toFixed(2) + 'deg) rotateX(' + (ny * -3.2).toFixed(2) + 'deg)';
+      } else if (el.style.transform) {
+        el.style.transform = '';
+      }
+    });
+  }
+  function requestFrame() { if (!raf) raf = requestAnimationFrame(frame); }
+
+  window.addEventListener('mousemove', function (e) {
+    pointer.x = e.clientX; pointer.y = e.clientY;
+    requestFrame();
+  }, { passive: true });
+  window.addEventListener('scroll', requestFrame, { passive: true });
 })();
 </script>
 </body>
