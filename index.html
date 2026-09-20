@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>João Andrade — Engenheiro de Software</title>
-<meta name="description" content="Construí o Herm, o DogBot e o GreenLightFlow — os três rodando em produção, os três inteiros: backend, interface, banco e infra.">
+<meta name="description" content="João Andrade, engenheiro full stack desde 2020.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,6 +21,10 @@
   button { font-family: inherit; }
   @keyframes pf-msg { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
   @keyframes pf-dot { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+  [data-log-scroll] { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+  [data-log-scroll]::-webkit-scrollbar { width: 5px; }
+  [data-log-scroll]::-webkit-scrollbar-track { background: transparent; }
+  [data-log-scroll]::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   [data-bar] a[href]:not([data-bar-brand]):hover { color: var(--ink); }
   #chips button:hover { color: var(--ink); }
@@ -31,6 +35,15 @@
     [data-bar-nav] { display: none !important; }
     [data-sec] { padding-left: 20px !important; padding-right: 20px !important; }
     [data-split] { grid-template-columns: 1fr !important; gap: 34px !important; }
+    [data-sobre-split] {
+      grid-template-columns: 84px 1fr !important;
+      grid-template-areas: 'eyebrow eyebrow' 'photo title' 'body body' 'trajetoria trajetoria' !important;
+      column-gap: 18px !important;
+      row-gap: 16px !important;
+    }
+    [data-sobre-split] > *:first-child { width: 84px !important; aspect-ratio: 1/1 !important; align-self: center; }
+    [data-sobre-split] [style*="grid-area:eyebrow"] { margin-bottom: 0 !important; }
+    [data-sobre-split] [style*="grid-area:body"] { padding-top: 0 !important; }
     [data-msg] { max-width: 90% !important; font-size: 15px !important; }
     [data-tl] { grid-template-columns: 58px 1fr !important; gap: 18px !important; }
     #contact-links { grid-template-columns: 1fr !important; }
@@ -188,8 +201,8 @@
   </nav>
 </div>
 
-<section id="conversa" data-theme="0" data-sec="" style="min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 40px 30px;color:var(--ink)">
-  <div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:14px">
+<section id="conversa" data-theme="0" data-sec="" style="height:100vh;height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 40px 30px;color:var(--ink);overflow:hidden">
+  <div data-log-scroll="" style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;overflow-y:auto">
     <div id="log" style="display:flex;flex-direction:column;gap:14px"></div>
     <div id="typing" style="display:none;justify-content:flex-start">
       <div style="display:flex;gap:5px;padding:16px 18px;background:var(--surface);border-left:2px solid var(--line-2)">
@@ -205,6 +218,7 @@
   <form id="chat-form" style="display:flex;align-items:center;gap:14px;padding:16px 0;margin-top:14px;border-top:1px solid var(--line)">
     <span style="font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink-faint)">›</span>
     <input id="chat-input" placeholder="pergunte qualquer coisa" style="flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:15px" autocomplete="off">
+    <button type="submit" id="chat-submit" aria-label="Enviar" style="border:1px solid var(--line-2);background:transparent;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;padding:8px 14px;cursor:pointer;border-radius:2px;flex-shrink:0">Enviar</button>
   </form>
 
   <a href="#herm" style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:16px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">
@@ -479,6 +493,7 @@
         </div>
         <h3 style="margin:0 0 14px;font-size:25px;font-weight:600;letter-spacing:-.03em;line-height:1.15;text-wrap:balance">DG Oracle — Sorte em previsão</h3>
         <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:var(--ink-soft);text-wrap:pretty">Um motor de previsão de duplo green para apostas esportivas. Modelos matemáticos e machine learning leem dezenas de sinais de contexto de cada partida e reduzem tudo a uma única resposta.</p>
+        <p style="margin:0 0 16px;font-size:14px;line-height:1.55;color:var(--ink-faint);text-wrap:pretty">Para esse mesmpo cliente, também entreguei o DgDrops: sistema de monitoramento de odds esportivas que coleta dados, calcula sinais e avisa por WhatsApp.</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-faint)">
           <span style="border:1px solid var(--line);padding:6px 11px">Machine Learning</span>
           <span style="border:1px solid var(--line);padding:6px 11px">Modelagem estatística</span>
@@ -502,20 +517,30 @@
           <span style="border:1px solid var(--line);padding:6px 11px">Painel customizado</span>
         </div>
       </div>
+
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:18px;margin-top:14px;border-top:1px solid var(--line);font-size:14px;line-height:1.5;color:var(--ink-faint)">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap">Também</span>
+        <span>Site institucional pra RCPB Contabilidade, reestruturação completa do site, pensado para campanhas de marketing e captação de leads.</span>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="sobre" data-theme="1" data-sec="" style="box-sizing:border-box;color:var(--ink);padding:18vh 40px">
-  <div data-split="" style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;align-items:start;width:100%">
-    <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:20px">Sobre</div>
-      <h2 style="margin:0 0 24px;font-size:clamp(32px,3.9vw,52px);line-height:1.05;font-weight:600;letter-spacing:-.035em;text-wrap:balance">Engenheiro de backend com obsessão por interfaces</h2>
+  <div data-split="" data-sobre-split="" style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(140px,200px) minmax(0,1fr) minmax(0,1fr);grid-template-areas:'photo eyebrow trajetoria' 'photo title trajetoria' 'photo body trajetoria';gap:0 56px;align-items:start;width:100%">
+    <div style="grid-area:photo;width:100%;aspect-ratio:3/4;border-radius:20px;overflow:hidden;border:1px solid var(--line-2);box-shadow:0 14px 34px var(--shadow)">
+      <img src="assets/photos/joao.jpg" alt="Foto de João Andrade" style="width:100%;height:100%;object-fit:cover;object-position:12% 22%">
+    </div>
+    <div style="grid-area:eyebrow;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:20px">Sobre</div>
+    <div style="grid-area:title">
+      <h2 style="margin:0;font-size:clamp(32px,3.9vw,52px);line-height:1.05;font-weight:600;letter-spacing:-.035em;text-wrap:balance">Engenheiro de backend com obsessão por interfaces</h2>
+    </div>
+    <div style="grid-area:body;padding-top:24px">
       <p style="margin:0 0 18px;font-size:18px;line-height:1.62;color:var(--ink-soft);max-width:50ch;text-wrap:pretty">Meu primeiro contato com programação foi em 2017 e sou freelancer desde 2021, já passei por muitas áreas e hoje faço de tudo que você imaginar.</p>
       <p style="margin:0;font-size:18px;line-height:1.62;color:var(--ink-soft);max-width:50ch;text-wrap:pretty">Atualmente sou Engenheiro de Software na Moodar, uma empresa de soluções B2B com ênfase em saúde mental e desenvolvimento humano, mas sigo tocando produtos próprios em paralelo e trabalhando como Freelancer.</p>
     </div>
 
-    <div>
+    <div style="grid-area:trajetoria">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:26px">Trajetória</div>
 
       <div data-tl="" style="display:grid;grid-template-columns:72px 1fr;gap:0 26px">
@@ -604,7 +629,6 @@
   'use strict';
 
   var CROSSFADE = 0.42;
-  var TYPING_DELAY = 620;
 
   var DARK  = { bg: [10, 11, 12], ink: [237, 238, 234], surf: [21, 23, 26] };
   var LIGHT = { bg: [244, 243, 239], ink: [23, 24, 26], surf: [233, 231, 224] };
@@ -663,16 +687,36 @@
   paint();
 
   // ---- chat ----
-  var answers = [
-    { label: 'O que é a Herm?', key: 'herm', text: 'SaaS de atendimento para Empresas. O Bot próprio atende, vende e agenda pelo próprio número; eu fiz o painel, o catálogo, a agenda e a integração. É onde passo mais tempo hoje.' },
-    { label: 'Backend ou front?', key: 'stack', text: 'Os dois e mais um pouco, hoje construo  produtos de ponta a ponta, do backend à interface, passando por banco, infraestrutura, burocracias e etc. Foi assim que coloquei meus próprios produtos em produção, e também dos meus trabalhos como freelancer.' },
-    { label: 'Faz consultoria?', key: 'consult', text: 'Faço sim! Desde a arquitetura inicial, decisões técnicas de produtos já estabelecidos, até a construção e o lançamento da aplicação.' },
-    { label: 'Como te contatar?', key: 'contrat', text: 'Me manda uma mensagem no WhatsApp que te respondo assim que possível, só <a href="https://wa.me/5581982132346?text=Ol%C3%A1" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">clicar aqui</a>.' }
+  // Backend real (S:\portfolio\ai) — IA com base de conhecimento própria, streaming
+  // SSE via POST /v1/ask. Atualizar essa URL depois do primeiro deploy na Square
+  // Cloud se o subdomínio mudar (ver squarecloud.app -> SUBDOMAIN).
+  var PORTFOLIO_AI_URL = 'https://joaoandradeai.squareweb.app';
+  var FALLBACK_TEXT = 'Deu ruim de rede aqui do meu lado agora. Me chama direto no WhatsApp: +55 81 98213-2346 (<a href="https://wa.me/5581982132346?text=Ol%C3%A1" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">clique aqui</a>).';
+
+  // Pool de perguntas prontas — os 4 primeiros aparecem de cara; conforme cada um é
+  // usado, o próximo da lista assume o lugar (sempre até VISIBLE_CHIPS na tela).
+  var VISIBLE_CHIPS = 4;
+  var chips = [
+    'Quais projetos você já fez?',
+    'Backend ou front?',
+    'Faz consultoria?',
+    'Como te contatar?',
+    'O que é a Herm?',
+    'O que é o DogBot?',
+    'O que é o GreenLightFlow?',
+    'Quantos anos você tem?',
+    'Onde você mora?',
+    'Você trabalha remoto?',
+    'Está disponível pra projeto novo?',
+    'Qual sua stack preferida?',
+    'Onde estudou?',
+    'Trabalha em alguma empresa hoje?'
   ];
 
   var state = {
     typing: false,
-    log: [{ role: 'bot', text: 'Olá, tudo bem? Me chamo João Andrade, sou Engenheiro de Software, construo produtos próprios desde 2020, com três deles rodando em produção atualmente, mas sigo aberto para novos desafios, só rolar a tela que vai ver um pouco do que faço.' }]
+    log: [{ role: 'bot', text: 'Olá, tudo bem?<br><br>Me chamo João Andrade, Engenheiro de Software.<br><br>Construo produtos próprios desde 2020, três deles rodando em produção hoje.<br><br>Sigo aberto pra novos desafios, só rolar a tela que já vê um pouco do que faço.' }],
+    askedChips: {}
   };
 
   var logEl = document.getElementById('log');
@@ -680,20 +724,46 @@
   var chipsEl = document.getElementById('chips');
   var form = document.getElementById('chat-form');
   var input = document.getElementById('chat-input');
-  var chatTimeout = null;
+  var submitBtn = document.getElementById('chat-submit');
 
-  function match(q) {
-    var t = q.toLowerCase();
-    var hit = null;
-    for (var i = 0; i < answers.length; i++) { if (t.indexOf(answers[i].key) !== -1) { hit = answers[i]; break; } }
-    if (hit) return hit.text;
-    if (t.indexOf('preço') !== -1 || t.indexOf('valor') !== -1 || t.indexOf('quanto') !== -1) return 'Depende do que você precisa, cada projeto terá seu escopo especifico e também um preço. Me conta um pouco do que você tem em mente e eu te passo uma estimativa.';
-    if (t.indexOf('dogbot') !== -1) return 'Assistente pessoal multifuncional no WhatsApp, com módulos de financeiro, rotinas, DogLog, Spotify, esportes e fitness, painel próprio em React e app companion com bolha flutuante.';
-    if (t.indexOf('green') !== -1 || t.indexOf('flow') !== -1) return 'GreenLightFlow: plataforma de gestão de fluxo para times de redes sociais. React e Django.';
-    if (t.indexOf('moodar') !== -1 || t.indexOf('trabalha') !== -1) return 'Sou Engenheiro de Software na Moodar desde 2025, em soluções B2B com ênfase em saúde mental, sigo tocando produtos próprios em paralelo e em trabalhos como freelancer.';
-    if (t.indexOf('remoto') !== -1 || t.indexOf('onde') !== -1) return 'Trabalho remoto e já toquei projeto com time em outro fuso sem atrito.';
-    if (t.indexOf('dispon') !== -1) return 'Estou. Pego projeto novo e consultoria pontual ,do tipo destravar gargalo técnico de quem já tem produto no ar.';
-    return 'Boa pergunta — essa eu prefiro responder pessoalmente. Me chama e a gente conversa, só <a href="https://wa.me/5581982132346?text=Ol%C3%A1" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">clicar aqui</a>.';
+  function askAI(question) {
+    return fetch(PORTFOLIO_AI_URL + '/v1/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: question })
+    }).then(function (res) {
+      if (!res.ok || !res.body) throw new Error('bad_response');
+      var reader = res.body.getReader();
+      var decoder = new TextDecoder();
+      var buffer = '';
+      var answer = '';
+
+      function readChunk() {
+        return reader.read().then(function (result) {
+          if (result.done) return answer;
+          buffer += decoder.decode(result.value, { stream: true });
+          var blocks = buffer.split('\n\n');
+          buffer = blocks.pop();
+          for (var i = 0; i < blocks.length; i++) {
+            var block = blocks[i];
+            var eventMatch = /^event: (.+)$/m.exec(block);
+            var dataMatch = /^data: (.+)$/m.exec(block);
+            var eventName = eventMatch ? eventMatch[1].trim() : 'message';
+            if (eventName === 'error') throw new Error('model_call_failed');
+            if (eventName === 'done') return answer;
+            if (dataMatch) {
+              try {
+                var payload = JSON.parse(dataMatch[1]);
+                if (payload.delta) answer += payload.delta;
+              } catch (e) { /* ignora chunk malformado */ }
+            }
+          }
+          return readChunk();
+        });
+      }
+
+      return readChunk();
+    });
   }
 
   function render() {
@@ -717,31 +787,36 @@
     });
 
     typingEl.style.display = state.typing ? 'flex' : 'none';
+    submitBtn.disabled = state.typing;
+    submitBtn.style.opacity = state.typing ? '.5' : '1';
+    submitBtn.style.cursor = state.typing ? 'default' : 'pointer';
 
-    var asked = {};
-    state.log.forEach(function (m) { if (m.role === 'user') asked[m.text] = true; });
     chipsEl.innerHTML = '';
-    answers.forEach(function (a) {
-      if (asked[a.label]) return;
+    var visible = chips.filter(function (label) { return !state.askedChips[label]; }).slice(0, VISIBLE_CHIPS);
+    visible.forEach(function (label) {
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.textContent = a.label;
+      btn.textContent = label;
       btn.style.cssText = "border:1px solid var(--line-2);background:transparent;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;padding:10px 15px;cursor:pointer;border-radius:2px";
-      btn.addEventListener('click', function () { push(a.label, a.text); });
+      btn.addEventListener('click', function () { state.askedChips[label] = true; push(label); });
       chipsEl.appendChild(btn);
     });
   }
 
-  function push(userText, botText) {
-    clearTimeout(chatTimeout);
+  function push(userText) {
     state.log = state.log.concat([{ role: 'user', text: userText }]).slice(-4);
     state.typing = true;
     render();
-    chatTimeout = setTimeout(function () {
+
+    askAI(userText).then(function (answer) {
       state.typing = false;
-      state.log = state.log.concat([{ role: 'bot', text: botText }]).slice(-4);
+      state.log = state.log.concat([{ role: 'bot', text: answer || FALLBACK_TEXT }]).slice(-4);
       render();
-    }, TYPING_DELAY);
+    }).catch(function () {
+      state.typing = false;
+      state.log = state.log.concat([{ role: 'bot', text: FALLBACK_TEXT }]).slice(-4);
+      render();
+    });
   }
 
   form.addEventListener('submit', function (e) {
@@ -749,7 +824,7 @@
     var q = input.value.trim();
     if (!q || state.typing) return;
     input.value = '';
-    push(q, match(q));
+    push(q);
   });
 
   render();
