@@ -22,10 +22,6 @@
   button { font-family: inherit; }
   @keyframes pf-msg { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
   @keyframes pf-dot { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
-  [data-log-scroll] { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
-  [data-log-scroll]::-webkit-scrollbar { width: 5px; }
-  [data-log-scroll]::-webkit-scrollbar-track { background: transparent; }
-  [data-log-scroll]::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; }
   [data-media] { transition: transform .5s cubic-bezier(.2,.8,.2,1), border-color .4s; -webkit-user-select: none; user-select: none; }
   [data-media]:hover { border-color: var(--ink-faint); }
   [data-media], [data-media] img, [data-media] a { -webkit-user-drag: none; user-drag: none; }
@@ -209,8 +205,8 @@
 </div>
 
 <section id="conversa" data-theme="0" data-sec="" style="height:100vh;height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 40px 30px;color:var(--ink);overflow:hidden">
-  <div id="log-scroll" data-log-scroll="" style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y">
-    <div id="log" style="display:flex;flex-direction:column;gap:14px"></div>
+  <div id="log-scroll" style="display:flex;flex-direction:column;gap:14px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain">
+    <div id="log" style="display:flex;flex-direction:column;gap:14px;margin-top:auto"></div>
     <div id="typing" style="display:none;justify-content:flex-start">
       <div style="display:flex;gap:5px;padding:16px 18px;background:var(--surface);border-left:2px solid var(--line-2)">
         <span style="width:5px;height:5px;border-radius:50%;background:var(--ink-soft);animation:pf-dot 1.1s ease-in-out infinite"></span>
@@ -228,7 +224,7 @@
     <button type="submit" id="chat-submit" aria-label="Enviar" style="border:1px solid var(--line-2);background:transparent;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.04em;padding:8px 14px;cursor:pointer;border-radius:2px;flex-shrink:0">Enviar</button>
   </form>
 
-  <a href="#herm" style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:16px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">
+  <a id="scroll-cta" href="#herm" style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:16px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">
     <span>Role para ver o trabalho</span>
     <span>↓</span>
   </a>
@@ -738,6 +734,22 @@
   var form = document.getElementById('chat-form');
   var input = document.getElementById('chat-input');
   var submitBtn = document.getElementById('chat-submit');
+  var conversaEl = document.getElementById('conversa');
+  var scrollCtaEl = document.getElementById('scroll-cta');
+
+  // Altura da área de mensagens calculada em pixels via JS, em vez de depender de
+  // flex-grow pra descontar chips/form/link — mais à prova de falha entre
+  // navegadores/dispositivos (achado real: em alguns navegadores mobile o
+  // flex:1;min-height:0 não reduzia essa área o suficiente pra sobrar overflow
+  // nenhum pra rolar).
+  function sizeLogScroll() {
+    var cs = getComputedStyle(conversaEl);
+    var verticalPadding = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    var used = verticalPadding + chipsEl.offsetHeight + form.offsetHeight + scrollCtaEl.offsetHeight;
+    var available = conversaEl.clientHeight - used;
+    logScrollEl.style.height = Math.max(60, available) + 'px';
+  }
+  window.addEventListener('resize', sizeLogScroll);
 
   function askAI(question) {
     return fetch(PORTFOLIO_AI_URL + '/v1/ask', {
@@ -815,6 +827,7 @@
       chipsEl.appendChild(btn);
     });
 
+    sizeLogScroll();
     logScrollEl.scrollTop = logScrollEl.scrollHeight;
   }
 
