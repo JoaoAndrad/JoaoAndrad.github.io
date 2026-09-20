@@ -246,7 +246,7 @@
             <div class="herm-mock__content">
               <div>
                 <div class="herm-mock__badge"><span class="herm-mock__dot"></span>Atende no seu próprio WhatsApp ou Instagram</div>
-                <div class="herm-mock__title">Sua empresa<br><span class="herm-mock__word-cycle" id="hermWordCycle">vendendo</span> sozinho</div>
+                <div class="herm-mock__title">Sua empresa<br><span class="herm-mock__word-cycle" id="hermWordCycle">vendendo</span> sozinha</div>
                 <p class="herm-mock__sub">O cliente manda mensagem, o atendimento responde na hora e o pedido cai no painel.</p>
                 <div class="herm-mock__ctas">
                   <span class="herm-mock__btn herm-mock__btn--primary">Começar teste grátis</span>
@@ -254,7 +254,7 @@
                 </div>
                 <div class="herm-mock__checks">
                   <span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Sem programar</span>
-                  <span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No número que já conhecem</span>
+                  <span><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>No perfil que já conhecem</span>
                 </div>
               </div>
               <div class="herm-mock__demo">
@@ -688,13 +688,13 @@
     var hit = null;
     for (var i = 0; i < answers.length; i++) { if (t.indexOf(answers[i].key) !== -1) { hit = answers[i]; break; } }
     if (hit) return hit.text;
-    if (t.indexOf('preço') !== -1 || t.indexOf('valor') !== -1 || t.indexOf('quanto') !== -1) return 'Depende do escopo — cobro por projeto, não por hora. Me conta o que precisa e eu te passo um número.';
-    if (t.indexOf('dogbot') !== -1) return 'Assistente pessoal multifuncional no WhatsApp, com módulos de financeiro, rotinas, DogLog, Spotify, esportes e fitness — painel próprio em React e app companion com bolha flutuante.';
+    if (t.indexOf('preço') !== -1 || t.indexOf('valor') !== -1 || t.indexOf('quanto') !== -1) return 'Depende do que você precisa, cada projeto terá seu escopo especifico e também um preço. Me conta um pouco do que você tem em mente e eu te passo uma estimativa.';
+    if (t.indexOf('dogbot') !== -1) return 'Assistente pessoal multifuncional no WhatsApp, com módulos de financeiro, rotinas, DogLog, Spotify, esportes e fitness, painel próprio em React e app companion com bolha flutuante.';
     if (t.indexOf('green') !== -1 || t.indexOf('flow') !== -1) return 'GreenLightFlow: plataforma de gestão de fluxo para times de redes sociais. React e Django.';
-    if (t.indexOf('moodar') !== -1 || t.indexOf('trabalha') !== -1) return 'Sou Engenheiro de Software na Moodar desde 2025, em soluções B2B com ênfase em saúde mental — e sigo tocando produtos próprios em paralelo.';
+    if (t.indexOf('moodar') !== -1 || t.indexOf('trabalha') !== -1) return 'Sou Engenheiro de Software na Moodar desde 2025, em soluções B2B com ênfase em saúde mental, sigo tocando produtos próprios em paralelo e em trabalhos como freelancer.';
     if (t.indexOf('remoto') !== -1 || t.indexOf('onde') !== -1) return 'Trabalho remoto e já toquei projeto com time em outro fuso sem atrito.';
-    if (t.indexOf('dispon') !== -1) return 'Estou. Pego projeto novo e consultoria pontual — do tipo destravar gargalo técnico de quem já tem produto no ar.';
-    return 'Boa pergunta — essa eu prefiro responder pessoalmente. Me chama e a gente conversa.';
+    if (t.indexOf('dispon') !== -1) return 'Estou. Pego projeto novo e consultoria pontual ,do tipo destravar gargalo técnico de quem já tem produto no ar.';
+    return 'Boa pergunta — essa eu prefiro responder pessoalmente. Me chama e a gente conversa, só <a href="https://wa.me/5581982132346?text=Ol%C3%A1" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline">clicar aqui</a>.';
   }
 
   function render() {
