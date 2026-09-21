@@ -43,6 +43,11 @@
   #chips button:hover { color: var(--ink); }
   #contato a[href^="mailto"], #contato a[href^="http"] { transition: opacity .2s; }
   #contato a:hover { opacity: .85; }
+  #log-scroll { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+  #log-scroll::-webkit-scrollbar { width: 6px; }
+  #log-scroll::-webkit-scrollbar-track { background: transparent; }
+  #log-scroll::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; }
+  #log-scroll::-webkit-scrollbar-thumb:hover { background: var(--ink-faint); }
   @media (max-width: 900px) {
     [data-bar] { padding: 14px 20px !important; }
     [data-bar-nav] { display: none !important; }
@@ -218,7 +223,7 @@
 </div>
 
 <section id="conversa" data-theme="0" data-sec="" style="height:100vh;height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;padding:100px 40px 30px;color:var(--ink);overflow:hidden">
-  <div id="log-scroll" style="display:flex;flex-direction:column;gap:14px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain">
+  <div id="log-scroll" style="display:flex;flex-direction:column;gap:14px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:auto">
     <div id="log" style="display:flex;flex-direction:column;gap:14px;margin-top:auto"></div>
     <div id="typing" style="display:none;justify-content:flex-start">
       <div style="display:flex;gap:5px;padding:16px 18px;background:var(--surface);border-left:2px solid var(--line-2)">
