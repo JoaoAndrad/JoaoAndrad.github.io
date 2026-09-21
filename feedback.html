@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback — João Andrade</title>
+<meta name="description" content="Deixe seu feedback sobre o trabalho que fiz — leva menos de um minuto.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/logos/ja-favicon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://joaoandrad.github.io/feedback.html">
+<meta property="og:title" content="Feedback — João Andrade">
+<meta property="og:description" content="Deixe seu feedback sobre o trabalho que fiz — leva menos de um minuto.">
+<meta property="og:image" content="https://joaoandrad.github.io/assets/logos/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Feedback — João Andrade">
+<meta name="twitter:description" content="Deixe seu feedback sobre o trabalho que fiz — leva menos de um minuto.">
+<meta name="twitter:image" content="https://joaoandrad.github.io/assets/logos/og-preview.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0B0C; --ink: #EDEEEA; --ink-soft: rgba(237,238,234,.76);
+    --ink-faint: rgba(237,238,234,.56); --line: rgba(237,238,234,.17);
+    --line-2: rgba(237,238,234,.3); --surface: #15171A;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font-family: 'Archivo', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  textarea, input { font-family: inherit; }
+  textarea::placeholder, input::placeholder { color: var(--ink-faint); }
+  #wrap {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 24px 48px;
+    max-width: 620px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  #top { margin-bottom: auto; }
+  #bottom { margin-top: auto; }
+  #content { padding: 44px 0; }
+  .back-btn, .skip-btn { border: 0; background: transparent; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; color: var(--ink-faint); transition: color .15s; }
+  .back-btn { padding: 13px 4px; }
+  .skip-btn { padding: 13px 10px; }
+  .back-btn:hover, .skip-btn:hover { color: var(--ink); }
+  textarea:focus, input:focus { outline: none; border-color: var(--line-2); }
+  .star-btn { border: 0; background: transparent; padding: 0 2px; font-size: 46px; line-height: 1; cursor: pointer; transition: color .16s; }
+  .star-pop { animation: fb-pop .34s ease; }
+  .fb-step { animation: fb-step .34s ease both; }
+  @keyframes fb-step { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes fb-pop { 0% { transform: scale(1); } 40% { transform: scale(1.22); } 100% { transform: scale(1); } }
+  @media (max-width: 560px) {
+    #wrap { padding: 28px 20px 40px !important; }
+    .fb-q { font-size: 25px !important; }
+    .stars-row { gap: 6px !important; }
+    .star-btn { font-size: 38px !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="wrap">
+  <div id="top"></div>
+  <div id="content"></div>
+  <div id="bottom">
+    <div id="nav"></div>
+    <div id="error-box"></div>
+    <p style="margin:26px 0 0;font-size:12px;color:var(--ink-faint)">João Andrade — <a href="index.html" style="border-bottom:1px solid var(--line)">joaoandrad.github.io</a></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var API = 'https://joaoandradeai.squareweb.app';
+  var DRAFT_KEY = 'ja-feedback-draft';
+  var WA_NUMBER = '5581982132346';
+
+  var ASPECTS_GOOD = ['Comunicação', 'Prazo de entrega', 'Qualidade técnica', 'Custo-benefício', 'Suporte pós-entrega'];
+  var ASPECTS_BAD = ['Comunicação', 'Prazo de entrega', 'Qualidade técnica', 'Preço', 'Suporte pós-entrega'];
+  var SERVICES = ['Consultoria', 'Desenvolvimento Web', 'Integração', 'Automação', 'Suporte/Manutenção', 'Outro'];
+  var HINTS = {
+    1: 'Bem ruim — quero entender o que aconteceu',
+    2: 'Ficou abaixo do esperado',
+    3: 'Deu conta, mas faltou algo',
+    4: 'Bom trabalho',
+    5: 'Excelente — obrigado!'
+  };
+
+  var params = new URLSearchParams(window.location.search);
+  var project = (params.get('projeto') || '').trim();
+  var presetName = (params.get('cliente') || '').trim();
+  var presetService = (params.get('tipo') || '').trim();
+
+  var draft = {};
+  try { draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') || {}; } catch (e) { draft = {}; }
+
+  var state = {
+    step: 0,
+    rating: draft.rating || 0,
+    hover: 0,
+    aspects: Array.isArray(draft.aspects) ? draft.aspects : [],
+    comment: draft.comment || '',
+    name: presetName || draft.name || '',
+    service: presetService || draft.service || '',
+    recommend: null,
+    publish: false,
+    sending: false,
+    error: false
+  };
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : str;
+    return div.innerHTML;
+  }
+
+  function saveDraft() {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({
+        rating: state.rating, aspects: state.aspects, comment: state.comment,
+        name: state.name, service: state.service
+      }));
+    } catch (e) {}
+  }
+
+  function chipStyle(active) {
+    return active
+      ? 'cursor:pointer;font-size:13.5px;padding:10px 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:600'
+      : 'cursor:pointer;font-size:13.5px;padding:10px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink-soft)';
+  }
+
+  function primaryStyle(enabled) {
+    return enabled
+      ? 'border:0;background:var(--ink);color:var(--bg);font-size:14.5px;font-weight:700;border-radius:9px;padding:14px 26px;cursor:pointer'
+      : 'border:1px solid var(--line);background:transparent;color:var(--ink-faint);font-size:14.5px;font-weight:600;border-radius:9px;padding:14px 26px;cursor:not-allowed';
+  }
+
+  function waHref(text) {
+    return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
+  }
+
+  // Usado no fallback de erro de envio — o WhatsApp já chega com o relato completo
+  // que a pessoa preencheu, em vez de uma frase genérica que obrigaria a digitar tudo
+  // de novo.
+  function buildFeedbackSummary() {
+    var lines = ['Olá João, tentei enviar um feedback pelo site mas deu erro. Segue o que preenchi:', ''];
+    lines.push('Sobre: ' + (project || '—'));
+    lines.push('Nota: ' + (state.rating ? state.rating + '/5' : '—'));
+    lines.push('Tipo de serviço: ' + (state.service || '—'));
+    lines.push('Destaques/pontos: ' + (state.aspects.length ? state.aspects.join(', ') : '—'));
+    if (isGood()) lines.push('Recomendaria: ' + (state.recommend === null ? '—' : (state.recommend === 'yes' ? 'Sim' : 'Não')));
+    lines.push('Nome: ' + ((state.name || presetName || '').trim() || '—'));
+    lines.push('Comentário: ' + (state.comment.trim() || '—'));
+    return lines.join('\n');
+  }
+
+  function detailReady() {
+    return state.aspects.length > 0 || state.comment.trim().length > 0;
+  }
+
+  function isGood() { return state.rating >= 4; }
+
+  var topEl = document.getElementById('top');
+  var contentEl = document.getElementById('content');
+  var navEl = document.getElementById('nav');
+  var errorEl = document.getElementById('error-box');
+
+  function render() {
+    var active = document.activeElement;
+    var activeId = active && active.id;
+    var selStart = active && 'selectionStart' in active ? active.selectionStart : null;
+    var selEnd = active && 'selectionEnd' in active ? active.selectionEnd : null;
+
+    topEl.innerHTML = renderTop();
+    contentEl.innerHTML = renderContent();
+    navEl.innerHTML = renderNav();
+    errorEl.innerHTML = renderError();
+
+    if (activeId) {
+      var el = document.getElementById(activeId);
+      if (el) {
+        el.focus();
+        if (selStart !== null && el.setSelectionRange) {
+          try { el.setSelectionRange(selStart, selEnd); } catch (e) {}
+        }
+      }
+    }
+  }
+
+  function renderTop() {
+    var stepLabel = state.step === 3 ? 'Concluído' : 'Passo ' + (state.step + 1) + ' de 3';
+    var pct = [12, 46, 80, 100][state.step];
+    return '' +
+      '<div style="display:flex;align-items:center;gap:16px">' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap">' + escapeHtml(stepLabel) + '</span>' +
+        '<span style="flex:1;height:2px;background:var(--line);position:relative;overflow:hidden">' +
+          '<span style="position:absolute;inset:0 auto 0 0;width:' + pct + '%;background:var(--ink);transition:width .45s cubic-bezier(.4,0,.2,1)"></span>' +
+        '</span>' +
+      '</div>';
+  }
+
+  var lastAnimatedStep = -1;
+
+  function renderContent() {
+    var inner;
+    if (state.step === 0) inner = renderRating();
+    else if (state.step === 1) inner = renderDetail();
+    else if (state.step === 2) inner = renderWho();
+    else inner = renderDone();
+
+    // A animação de entrada só deve tocar quando o passo muda — sem isso, qualquer
+    // interação dentro do mesmo passo (marcar um chip, digitar) recria a div com a
+    // classe da animação e ela toca de novo a cada clique.
+    var animate = state.step !== lastAnimatedStep;
+    lastAnimatedStep = state.step;
+    return '<div class="' + (animate ? 'fb-step' : '') + '">' + inner + '</div>';
+  }
+
+  function renderRating() {
+    var contextLine = project ? 'Sobre o ' + project : 'Feedback';
+    var greeting = presetName ? presetName + ', como foi trabalhar comigo?' : 'Como foi trabalhar comigo?';
+    var lit = state.hover || state.rating;
+    var stars = '';
+    for (var n = 1; n <= 5; n++) {
+      var color = n <= lit ? '#F2C94C' : 'var(--line-2)';
+      var pop = state.rating === n ? ' star-pop' : '';
+      stars += '<button type="button" class="star-btn' + pop + '" data-action="hover-star" data-value="' + n + '" style="color:' + color + '" aria-label="' + n + ' de 5">★</button>';
+    }
+    var hint = lit ? HINTS[lit] : '';
+
+    return '' +
+      '<div>' +
+        '<p style="margin:0 0 10px;font-family:\'IBM Plex Mono\',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)">' + escapeHtml(contextLine) + '</p>' +
+        '<h1 class="fb-q" style="margin:0 0 14px;font-size:34px;line-height:1.14;font-weight:600;letter-spacing:-.03em">' + escapeHtml(greeting) + '</h1>' +
+        '<p style="margin:0 0 38px;font-size:16.5px;line-height:1.55;color:var(--ink-soft);max-width:44ch">Uma pergunta por vez, leva menos de um minuto. Começa pela nota geral.</p>' +
+        '<div class="stars-row" id="stars-row" style="display:flex;gap:10px;margin-bottom:20px" data-role="stars">' + stars + '</div>' +
+        '<p id="rating-hint" style="margin:0;min-height:26px;font-size:16px;font-weight:600;color:var(--ink)">' + escapeHtml(hint) + '</p>' +
+      '</div>';
+  }
+
+  // Hover só troca cor/texto no lugar — nunca chama render() aqui. Substituir os nós
+  // das estrelas via innerHTML enquanto o mouse está em cima delas faz o navegador
+  // recalcular :hover no meio do gesto (o nó antigo some sob o cursor), o que
+  // realimenta o próprio listener de mouseover num loop e também derruba o clique
+  // (o botão nunca sobrevive até o mouseup/click disparar em cima dele).
+  function updateStarPreview() {
+    var row = document.getElementById('stars-row');
+    var hintEl = document.getElementById('rating-hint');
+    if (!row || !hintEl) return;
+    var lit = state.hover || state.rating;
+    var buttons = row.querySelectorAll('.star-btn');
+    buttons.forEach(function (btn, idx) {
+      var n = idx + 1;
+      btn.style.color = n <= lit ? '#F2C94C' : 'var(--line-2)';
+    });
+    hintEl.textContent = lit ? HINTS[lit] : '';
+  }
+
+  function renderDetail() {
+    var good = isGood();
+    var list = good ? ASPECTS_GOOD : ASPECTS_BAD;
+    var chips = list.map(function (a) {
+      return '<button type="button" data-action="toggle-aspect" data-value="' + escapeHtml(a) + '" style="' + chipStyle(state.aspects.indexOf(a) !== -1) + '">' + escapeHtml(a) + '</button>';
+    }).join('');
+
+    return '' +
+      '<div>' +
+        '<h1 class="fb-q" style="margin:0 0 14px;font-size:32px;line-height:1.16;font-weight:600;letter-spacing:-.03em">' + (good ? 'O que se destacou?' : 'O que eu poderia ter feito melhor?') + '</h1>' +
+        '<p style="margin:0 0 30px;font-size:16px;line-height:1.55;color:var(--ink-soft);max-width:46ch">' + (good
+          ? 'Marque o que funcionou bem e, se puder, escreva uma ou duas frases sobre o que você achou do meu trabalho.'
+          : 'Sem rodeio, pode ser direto. Isso fica entre nós e é assim que eu corrijo o que não foi bem.') + '</p>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px">' + chips + '</div>' +
+        '<textarea id="comment-input" placeholder="' + escapeHtml(good ? 'Ex: resolveu em duas semanas o que estava travado há meses...' : 'O que te deixou insatisfeito?') + '" style="width:100%;min-height:118px;font-size:15px;line-height:1.55;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;resize:vertical">' + escapeHtml(state.comment) + '</textarea>' +
+        '<p style="margin:10px 0 0;font-size:13px;color:var(--ink-faint)">' + (good ? 'É Opcional, mas me ajuda muito!' : 'Opcional — mas quanto mais específico, melhor.') + '</p>' +
+      '</div>';
+  }
+
+  function renderWho() {
+    var good = isGood();
+    var askRecommend = good;
+    var askName = !presetName;
+    var askService = !state.service;
+    var canOfferPublish = good && state.comment.trim().length > 0;
+
+    var recBlock = '';
+    if (askRecommend) {
+      var recChoices = ['yes', 'no'].map(function (v) {
+        return '<button type="button" data-action="set-recommend" data-value="' + v + '" style="' + chipStyle(state.recommend === v) + '">' + (v === 'yes' ? 'Sim' : 'Não') + '</button>';
+      }).join('');
+      recBlock = '<div style="margin-bottom:28px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Você me recomendaria para outra pessoa?</p><div style="display:flex;gap:8px">' + recChoices + '</div></div>';
+    }
+
+    var nameBlock = '';
+    if (askName) {
+      nameBlock = '<div style="margin-bottom:22px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Como posso te chamar?</p><input id="name-input" type="text" value="' + escapeHtml(state.name) + '" placeholder="Nome ou nome da empresa" style="width:100%;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 16px"></div>';
+    }
+
+    var serviceBlock = '';
+    if (askService) {
+      var serviceChips = SERVICES.map(function (v) {
+        return '<button type="button" data-action="set-service" data-value="' + escapeHtml(v) + '" style="' + chipStyle(state.service === v) + '">' + escapeHtml(v) + '</button>';
+      }).join('');
+      serviceBlock = '<div style="margin-bottom:22px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Que tipo de trabalho foi?</p><div style="display:flex;flex-wrap:wrap;gap:8px">' + serviceChips + '</div></div>';
+    }
+
+    var publishBlock = '';
+    if (canOfferPublish) {
+      var on = state.publish;
+      var btnStyle = 'display:flex;align-items:flex-start;gap:13px;width:100%;text-align:left;cursor:pointer;border:1px solid ' + (on ? 'var(--line-2)' : 'var(--line)') + ';background:' + (on ? 'var(--surface)' : 'transparent') + ';border-radius:10px;padding:16px 18px;color:var(--ink)';
+      var boxStyle = 'flex:none;width:20px;height:20px;border-radius:5px;border:1px solid ' + (on ? 'var(--ink)' : 'var(--line-2)') + ';background:' + (on ? 'var(--ink)' : 'transparent') + ';color:var(--bg);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px';
+      publishBlock = '' +
+        '<button type="button" data-action="toggle-publish" style="' + btnStyle + '">' +
+          '<span style="' + boxStyle + '">' + (on ? '✓' : '') + '</span>' +
+          '<span style="text-align:left">' +
+            '<span style="display:block;font-size:14.5px;font-weight:600;margin-bottom:3px">Pode publicar isso no meu portfólio</span>' +
+            '<span style="display:block;font-size:13px;line-height:1.5;color:var(--ink-faint)">Com seu nome e o comentário acima. Sem isso, o feedback fica só comigo.</span>' +
+          '</span>' +
+        '</button>';
+    }
+
+    return '' +
+      '<div>' +
+        '<h1 class="fb-q" style="margin:0 0 14px;font-size:32px;line-height:1.16;font-weight:600;letter-spacing:-.03em">' + (good ? 'Quase pronto' : 'Só mais uma coisa') + '</h1>' +
+        '<p style="margin:0 0 30px;font-size:16px;line-height:1.55;color:var(--ink-soft);max-width:46ch">' + (good
+          ? 'Para eu poder usar seu comentário, preciso saber de quem ele é.'
+          : 'Se quiser deixar seu nome, eu te procuro para resolver o que ficou pendente.') + '</p>' +
+        recBlock + nameBlock + serviceBlock + publishBlock +
+      '</div>';
+  }
+
+  function renderDone() {
+    var good = isGood();
+    var doneTitle = good ? 'Obrigado — isso vale muito' : 'Recebi, e vou levar a sério';
+    var doneSub = good
+      ? (state.publish
+          ? 'Seu comentário pode aparecer no meu portfólio. Se conhecer alguém que precise de algo parecido, ficarei grato pela indicação.'
+          : 'Guardei aqui comigo. Se mudar de ideia sobre publicar, me avisa.')
+      : 'Não vou tratar isso como número numa planilha. Se deixou seu nome, eu te procuro nos próximos dias.';
+
+    var actions = good
+      ? [
+          { label: 'Ver o portfólio →', href: 'index.html', target: '_self', style: 'display:inline-block;padding:14px 24px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:600;border-radius:9px' },
+          { label: 'Indicar no WhatsApp ↗', href: waHref('Olá'), target: '_blank', style: 'display:inline-block;padding:14px 24px;border:1px solid var(--line-2);font-size:15px;font-weight:500;border-radius:9px' }
+        ]
+      : [
+          { label: 'Falar comigo agora ↗', href: waHref('Olá'), target: '_blank', style: 'display:inline-block;padding:14px 24px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:600;border-radius:9px' }
+        ];
+
+    var actionsHtml = actions.map(function (a) {
+      return '<a href="' + a.href + '" target="' + a.target + '" rel="noopener noreferrer" style="' + a.style + '">' + a.label + '</a>';
+    }).join('');
+
+    return '' +
+      '<div>' +
+        '<p style="margin:0 0 12px;font-family:\'IBM Plex Mono\',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)">Enviado</p>' +
+        '<h1 class="fb-q" style="margin:0 0 16px;font-size:34px;line-height:1.14;font-weight:600;letter-spacing:-.03em">' + doneTitle + '</h1>' +
+        '<p style="margin:0 0 32px;font-size:16.5px;line-height:1.58;color:var(--ink-soft);max-width:46ch">' + doneSub + '</p>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:10px">' + actionsHtml + '</div>' +
+      '</div>';
+  }
+
+  function renderNav() {
+    if (!(state.step > 0 && state.step < 3)) return '';
+    var canGoBack = state.step > 0;
+    var showSkip = state.step === 1 && !detailReady();
+    var showPrimary = state.step === 1 || state.step === 2;
+    var primaryEnabled = state.step === 2 ? !state.sending : detailReady();
+    var primaryLabel = state.step === 2 ? (state.sending ? 'Enviando…' : 'Enviar feedback') : 'Continuar →';
+
+    return '' +
+      '<div style="display:flex;align-items:center;gap:12px;padding-top:22px;border-top:1px solid var(--line)">' +
+        (canGoBack ? '<button type="button" class="back-btn" data-action="back">← Voltar</button>' : '') +
+        '<span style="flex:1"></span>' +
+        (showSkip ? '<button type="button" class="skip-btn" data-action="skip">Pular</button>' : '') +
+        (showPrimary ? '<button type="button" data-action="primary" style="' + primaryStyle(primaryEnabled) + '">' + primaryLabel + '</button>' : '') +
+      '</div>';
+  }
+
+  function renderError() {
+    if (!state.error) return '';
+    return '' +
+      '<div style="margin-top:18px;border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:16px 18px">' +
+        '<p style="margin:0 0 10px;font-size:14.5px;font-weight:600">Não consegui enviar daqui</p>' +
+        '<p style="margin:0 0 14px;font-size:14px;line-height:1.55;color:var(--ink-soft)">Problema de rede do meu lado — seu texto está salvo, pode tentar de novo. Ou me manda direto:</p>' +
+        '<a href="' + waHref(buildFeedbackSummary()) + '" target="_blank" rel="noopener noreferrer" style="display:inline-block;font-size:14px;font-weight:600;border-bottom:1px solid var(--line-2);padding-bottom:2px">WhatsApp +55 81 98213-2346 →</a>' +
+      '</div>';
+  }
+
+  function pickRating(n) {
+    state.rating = n;
+    state.aspects = [];
+    saveDraft();
+    updateStarPreview();
+    var row = document.getElementById('stars-row');
+    if (row) {
+      var btn = row.querySelectorAll('.star-btn')[n - 1];
+      if (btn) {
+        btn.classList.remove('star-pop');
+        void btn.offsetWidth;
+        btn.classList.add('star-pop');
+      }
+    }
+    clearTimeout(pickRating._t);
+    pickRating._t = setTimeout(function () {
+      state.step = 1;
+      render();
+    }, 420);
+  }
+
+  function toggleAspect(a) {
+    var idx = state.aspects.indexOf(a);
+    if (idx === -1) state.aspects.push(a); else state.aspects.splice(idx, 1);
+    saveDraft();
+    render();
+  }
+
+  function send() {
+    var payload = {
+      project: project,
+      serviceType: state.service,
+      clientName: (state.name || presetName || '').trim(),
+      rating: state.rating,
+      aspects: state.aspects,
+      wouldRecommend: state.recommend === null ? null : state.recommend === 'yes',
+      comment: state.comment.trim(),
+      canPublish: state.publish && isGood()
+    };
+    state.sending = true;
+    state.error = false;
+    render();
+
+    fetch(API + '/v1/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      if (!res.ok) throw new Error('bad_response');
+      try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+      state.sending = false;
+      state.step = 3;
+      render();
+    }).catch(function () {
+      state.sending = false;
+      state.error = true;
+      render();
+    });
+  }
+
+  document.getElementById('wrap').addEventListener('click', function (ev) {
+    var el = ev.target.closest('[data-action]');
+    if (!el) return;
+    var action = el.getAttribute('data-action');
+    var value = el.getAttribute('data-value');
+
+    if (action === 'hover-star') { pickRating(Number(value)); return; }
+    if (action === 'toggle-aspect') { toggleAspect(value); return; }
+    if (action === 'set-recommend') { state.recommend = value; saveDraft(); render(); return; }
+    if (action === 'set-service') { state.service = value; saveDraft(); render(); return; }
+    if (action === 'toggle-publish') { state.publish = !state.publish; render(); return; }
+    if (action === 'back') { state.step -= 1; render(); return; }
+    if (action === 'skip') { state.step = 2; render(); return; }
+    if (action === 'primary') {
+      if (state.step === 1) { if (detailReady()) { state.step = 2; render(); } return; }
+      if (!state.sending) send();
+      return;
+    }
+  });
+
+  document.getElementById('wrap').addEventListener('mouseover', function (ev) {
+    var el = ev.target.closest('[data-action="hover-star"]');
+    if (!el) return;
+    var n = Number(el.getAttribute('data-value'));
+    if (state.hover === n) return;
+    state.hover = n;
+    updateStarPreview();
+  });
+  document.getElementById('wrap').addEventListener('mouseout', function (ev) {
+    var el = ev.target.closest('[data-role="stars"]');
+    if (!el) return;
+    if (el.contains(ev.relatedTarget)) return;
+    if (state.hover === 0) return;
+    state.hover = 0;
+    updateStarPreview();
+  });
+
+  document.getElementById('wrap').addEventListener('input', function (ev) {
+    if (ev.target.id === 'comment-input') {
+      state.comment = ev.target.value;
+      saveDraft();
+      render();
+    } else if (ev.target.id === 'name-input') {
+      state.name = ev.target.value;
+      saveDraft();
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
