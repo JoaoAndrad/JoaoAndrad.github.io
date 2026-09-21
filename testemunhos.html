@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testemunhos — João Andrade</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="assets/logos/ja-favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0B0C; --ink: #EDEEEA; --ink-soft: rgba(237,238,234,.76);
+    --ink-faint: rgba(237,238,234,.56); --line: rgba(237,238,234,.17);
+    --line-2: rgba(237,238,234,.3); --surface: #15171A; --good: #22C55E; --bad: #F2554C;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font-family: 'Archivo', system-ui, sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  a { color: inherit; }
+  button, input { font-family: inherit; }
+  #wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 64px; }
+  h1 { font-size: 26px; font-weight: 700; letter-spacing: -.01em; margin: 0 0 6px; }
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 10px; }
+  .sub { font-size: 14px; color: var(--ink-soft); margin: 0 0 28px; }
+
+  #key-form { display: flex; gap: 8px; max-width: 420px; }
+  #key-form input { flex: 1; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; }
+  #key-form input:focus { outline: none; border-color: var(--line-2); }
+  #key-form button { font-size: 13.5px; font-weight: 700; color: var(--bg); background: var(--ink); border: none; border-radius: 8px; padding: 0 18px; cursor: pointer; }
+  #key-form button:hover { opacity: .88; }
+
+  #status { font-size: 13.5px; color: var(--ink-soft); margin-top: 14px; }
+  #status.error { color: var(--bad); }
+
+  #toolbar { display: none; align-items: center; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+  #toolbar .stat { font-size: 13px; color: var(--ink-soft); }
+  #toolbar .stat strong { color: var(--ink); font-weight: 700; }
+  #logout-btn { margin-left: auto; border: 0; background: transparent; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); cursor: pointer; }
+  #logout-btn:hover { color: var(--ink); }
+
+  #list { display: flex; flex-direction: column; gap: 14px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: var(--surface); }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+  .card-title { font-size: 15px; font-weight: 700; }
+  .card-meta { font-size: 12px; color: var(--ink-faint); margin-top: 3px; }
+  .stars { font-size: 15px; letter-spacing: 2px; white-space: nowrap; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .chip { font-size: 11.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
+  .comment { font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin: 10px 0 0; white-space: pre-wrap; }
+  .badges { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; }
+  .badge.rec-yes { background: rgba(34,197,94,.14); color: var(--good); }
+  .badge.rec-no { background: rgba(242,85,76,.14); color: var(--bad); }
+  .badge.publish { background: rgba(237,238,234,.1); color: var(--ink-soft); }
+
+  #empty { font-size: 14px; color: var(--ink-faint); padding: 40px 0; text-align: center; }
+</style>
+</head>
+<body>
+
+<div id="wrap">
+  <p class="eyebrow">Privado</p>
+  <h1>Testemunhos</h1>
+  <p class="sub">Todas as respostas do formulário de feedback, mais recente primeiro.</p>
+
+  <form id="key-form">
+    <input type="password" id="key-input" placeholder="Digite sua senha" autocomplete="off">
+    <button type="submit">Ver respostas</button>
+  </form>
+  <p id="status"></p>
+
+  <div id="toolbar">
+    <span class="stat" id="stat-total"></span>
+    <span class="stat" id="stat-rating"></span>
+    <button id="logout-btn" type="button">Trocar chave</button>
+  </div>
+
+  <div id="list"></div>
+  <p id="empty" style="display:none">Nenhuma resposta ainda.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var API = 'https://joaoandradeai.squareweb.app';
+  var STORAGE_KEY = 'ja-feedback-admin-key';
+
+  var form = document.getElementById('key-form');
+  var input = document.getElementById('key-input');
+  var statusEl = document.getElementById('status');
+  var toolbar = document.getElementById('toolbar');
+  var listEl = document.getElementById('list');
+  var emptyEl = document.getElementById('empty');
+  var logoutBtn = document.getElementById('logout-btn');
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  function starsFor(rating) {
+    var n = Number(rating) || 0;
+    return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
+  }
+
+  function formatDate(iso) {
+    try {
+      var d = new Date(iso);
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) +
+        ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) { return iso; }
+  }
+
+  function renderList(items) {
+    if (!items.length) {
+      listEl.innerHTML = '';
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    var sorted = items.slice().sort(function (a, b) {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    var total = sorted.length;
+    var avg = sorted.reduce(function (sum, f) { return sum + (Number(f.rating) || 0); }, 0) / total;
+    document.getElementById('stat-total').textContent = total + (total === 1 ? ' resposta' : ' respostas');
+    document.getElementById('stat-rating').innerHTML = 'Nota média: <strong>' + avg.toFixed(1) + '</strong>';
+
+    listEl.innerHTML = sorted.map(function (f) {
+      var title = escapeHtml(f.clientName || 'Sem nome');
+      var project = f.project ? escapeHtml(f.project) : '';
+      var service = f.serviceType ? escapeHtml(f.serviceType) : '';
+      var metaParts = [formatDate(f.createdAt)];
+      if (project) metaParts.push(project);
+      if (service) metaParts.push(service);
+
+      var chips = (Array.isArray(f.aspects) ? f.aspects : []).map(function (a) {
+        return '<span class="chip">' + escapeHtml(a) + '</span>';
+      }).join('');
+
+      var badges = '';
+      if (f.wouldRecommend === true) badges += '<span class="badge rec-yes">Recomendaria</span>';
+      if (f.wouldRecommend === false) badges += '<span class="badge rec-no">Não recomendaria</span>';
+      if (f.canPublish) badges += '<span class="badge publish">Autorizou publicar</span>';
+
+      var comment = f.comment ? '<p class="comment">' + escapeHtml(f.comment) + '</p>' : '';
+
+      return '' +
+        '<div class="card">' +
+          '<div class="card-top">' +
+            '<div>' +
+              '<div class="card-title">' + title + '</div>' +
+              '<div class="card-meta">' + metaParts.map(escapeHtml).join(' · ') + '</div>' +
+            '</div>' +
+            '<div class="stars" title="' + (f.rating || 0) + '/5">' + starsFor(f.rating) + '</div>' +
+          '</div>' +
+          (chips ? '<div class="chips">' + chips + '</div>' : '') +
+          comment +
+          (badges ? '<div class="badges">' + badges + '</div>' : '') +
+        '</div>';
+    }).join('');
+  }
+
+  function fetchFeedback(key) {
+    statusEl.textContent = 'Carregando...';
+    statusEl.className = '';
+    return fetch(API + '/v1/feedback', { headers: { 'x-admin-key': key } })
+      .then(function (res) {
+        if (res.status === 401) throw new Error('unauthorized');
+        if (!res.ok) throw new Error('bad_response');
+        return res.json();
+      })
+      .then(function (data) {
+        try { localStorage.setItem(STORAGE_KEY, key); } catch (e) {}
+        statusEl.textContent = '';
+        form.style.display = 'none';
+        toolbar.style.display = 'flex';
+        renderList(data.feedback || []);
+      })
+      .catch(function (err) {
+        statusEl.className = 'error';
+        statusEl.textContent = err.message === 'unauthorized'
+          ? 'Chave incorreta.'
+          : 'Não consegui carregar agora. Tenta de novo em instantes.';
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        form.style.display = 'flex';
+        toolbar.style.display = 'none';
+      });
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var key = input.value.trim();
+    if (!key) return;
+    fetchFeedback(key);
+  });
+
+  logoutBtn.addEventListener('click', function () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    input.value = '';
+    listEl.innerHTML = '';
+    emptyEl.style.display = 'none';
+    toolbar.style.display = 'none';
+    form.style.display = 'flex';
+    statusEl.textContent = '';
+    input.focus();
+  });
+
+  var savedKey = '';
+  try { savedKey = localStorage.getItem(STORAGE_KEY) || ''; } catch (e) {}
+  if (savedKey) {
+    input.value = savedKey;
+    fetchFeedback(savedKey);
+  }
+})();
+</script>
+
+</body>
+</html>
