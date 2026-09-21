@@ -90,11 +90,11 @@
   var ASPECTS_BAD = ['Comunicação', 'Prazo de entrega', 'Qualidade técnica', 'Preço', 'Suporte pós-entrega'];
   var SERVICES = ['Consultoria', 'Desenvolvimento Web', 'Integração', 'Automação', 'Suporte/Manutenção', 'Outro'];
   var HINTS = {
-    1: 'Bem ruim — quero entender o que aconteceu',
+    1: 'Muito ruim',
     2: 'Ficou abaixo do esperado',
     3: 'Deu conta, mas faltou algo',
     4: 'Bom trabalho',
-    5: 'Excelente — obrigado!'
+    5: 'Excelente!'
   };
 
   var params = new URLSearchParams(window.location.search);
@@ -166,7 +166,26 @@
   }
 
   function detailReady() {
+    // Nota ruim: o comentário vira obrigatório (é o que realmente importa nesse
+    // caso). Nota boa: continua opcional, aspecto marcado já basta.
+    if (!isGood()) return state.comment.trim().length > 0;
     return state.aspects.length > 0 || state.comment.trim().length > 0;
+  }
+
+  function whoFlags() {
+    return {
+      askRecommend: isGood(),
+      askName: !presetName,
+      askService: !presetService
+    };
+  }
+
+  function whoReady() {
+    var f = whoFlags();
+    if (f.askRecommend && state.recommend === null) return false;
+    if (f.askName && !state.name.trim()) return false;
+    if (f.askService && !state.service) return false;
+    return true;
   }
 
   function isGood() { return state.rating >= 4; }
@@ -279,18 +298,21 @@
         '<h1 class="fb-q" style="margin:0 0 14px;font-size:32px;line-height:1.16;font-weight:600;letter-spacing:-.03em">' + (good ? 'O que se destacou?' : 'O que eu poderia ter feito melhor?') + '</h1>' +
         '<p style="margin:0 0 30px;font-size:16px;line-height:1.55;color:var(--ink-soft);max-width:46ch">' + (good
           ? 'Marque o que funcionou bem e, se puder, escreva uma ou duas frases sobre o que você achou do meu trabalho.'
-          : 'Sem rodeio, pode ser direto. Isso fica entre nós e é assim que eu corrijo o que não foi bem.') + '</p>' +
+          : 'Sua sinceridade é fundamental, é assim que sigo melhorando.') + '</p>' +
         '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px">' + chips + '</div>' +
         '<textarea id="comment-input" placeholder="' + escapeHtml(good ? 'Ex: resolveu em duas semanas o que estava travado há meses...' : 'O que te deixou insatisfeito?') + '" style="width:100%;min-height:118px;font-size:15px;line-height:1.55;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;resize:vertical">' + escapeHtml(state.comment) + '</textarea>' +
-        '<p style="margin:10px 0 0;font-size:13px;color:var(--ink-faint)">' + (good ? 'É Opcional, mas me ajuda muito!' : 'Opcional — mas quanto mais específico, melhor.') + '</p>' +
+        '<p style="margin:10px 0 0;font-size:13px;color:var(--ink-faint)">' + (good ? 'É Opcional, mas me ajuda muito!' : 'Obrigatório — me ajuda a entender exatamente o que não funcionou.') + '</p>' +
       '</div>';
   }
 
+  var REQUIRED_MARK = '<span style="color:var(--ink-faint)"> *</span>';
+
   function renderWho() {
     var good = isGood();
-    var askRecommend = good;
-    var askName = !presetName;
-    var askService = !presetService;
+    var flags = whoFlags();
+    var askRecommend = flags.askRecommend;
+    var askName = flags.askName;
+    var askService = flags.askService;
     var canOfferPublish = good && state.comment.trim().length > 0;
 
     var recBlock = '';
@@ -298,12 +320,12 @@
       var recChoices = ['yes', 'no'].map(function (v) {
         return '<button type="button" data-action="set-recommend" data-value="' + v + '" style="' + chipStyle(state.recommend === v) + '">' + (v === 'yes' ? 'Sim' : 'Não') + '</button>';
       }).join('');
-      recBlock = '<div style="margin-bottom:28px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Você me recomendaria para outra pessoa?</p><div style="display:flex;gap:8px">' + recChoices + '</div></div>';
+      recBlock = '<div style="margin-bottom:28px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Você me recomendaria para outra pessoa?' + REQUIRED_MARK + '</p><div style="display:flex;gap:8px">' + recChoices + '</div></div>';
     }
 
     var nameBlock = '';
     if (askName) {
-      nameBlock = '<div style="margin-bottom:22px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Como posso te chamar?</p><input id="name-input" type="text" value="' + escapeHtml(state.name) + '" placeholder="Nome ou nome da empresa" style="width:100%;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 16px"></div>';
+      nameBlock = '<div style="margin-bottom:22px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Como posso te chamar?' + REQUIRED_MARK + '</p><input id="name-input" type="text" value="' + escapeHtml(state.name) + '" placeholder="Nome ou nome da empresa" style="width:100%;font-size:15px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:13px 16px"></div>';
     }
 
     var serviceBlock = '';
@@ -311,7 +333,7 @@
       var serviceChips = SERVICES.map(function (v) {
         return '<button type="button" data-action="set-service" data-value="' + escapeHtml(v) + '" style="' + chipStyle(state.service === v) + '">' + escapeHtml(v) + '</button>';
       }).join('');
-      serviceBlock = '<div style="margin-bottom:22px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Que tipo de trabalho foi?</p><div style="display:flex;flex-wrap:wrap;gap:8px">' + serviceChips + '</div></div>';
+      serviceBlock = '<div style="margin-bottom:22px"><p style="margin:0 0 12px;font-size:14px;font-weight:600">Qual o serviço?' + REQUIRED_MARK + '</p><div style="display:flex;flex-wrap:wrap;gap:8px">' + serviceChips + '</div></div>';
     }
 
     var publishBlock = '';
@@ -323,8 +345,7 @@
         '<button type="button" data-action="toggle-publish" style="' + btnStyle + '">' +
           '<span style="' + boxStyle + '">' + (on ? '✓' : '') + '</span>' +
           '<span style="text-align:left">' +
-            '<span style="display:block;font-size:14.5px;font-weight:600;margin-bottom:3px">Pode publicar isso no meu portfólio</span>' +
-            '<span style="display:block;font-size:13px;line-height:1.5;color:var(--ink-faint)">Com seu nome e o comentário acima. Sem isso, o feedback fica só comigo.</span>' +
+            '<span style="display:block;font-size:14.5px;font-weight:600;margin-bottom:3px">Pode publicar esse feedback</span>' +
           '</span>' +
         '</button>';
     }
@@ -373,9 +394,10 @@
   function renderNav() {
     if (!(state.step > 0 && state.step < 3)) return '';
     var canGoBack = state.step > 0;
-    var showSkip = state.step === 1 && !detailReady();
+    // Nota ruim não tem "Pular" — o comentário é obrigatório nesse caminho.
+    var showSkip = state.step === 1 && isGood() && !detailReady();
     var showPrimary = state.step === 1 || state.step === 2;
-    var primaryEnabled = state.step === 2 ? !state.sending : detailReady();
+    var primaryEnabled = state.step === 2 ? (whoReady() && !state.sending) : detailReady();
     var primaryLabel = state.step === 2 ? (state.sending ? 'Enviando…' : 'Enviar feedback') : 'Continuar →';
 
     return '' +
@@ -472,7 +494,7 @@
     if (action === 'skip') { state.step = 2; render(); return; }
     if (action === 'primary') {
       if (state.step === 1) { if (detailReady()) { state.step = 2; render(); } return; }
-      if (!state.sending) send();
+      if (!state.sending && whoReady()) send();
       return;
     }
   });
