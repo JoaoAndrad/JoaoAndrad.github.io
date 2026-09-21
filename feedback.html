@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Feedback — João Andrade</title>
-<meta name="description" content="Deixe seu feedback sobre o trabalho que fiz — leva menos de um minuto.">
+<meta name="description" content="Deixe seu feedback sobre sua experiência, leva menos de um minuto.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="assets/logos/ja-favicon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joaoandrad.github.io/feedback.html">
 <meta property="og:title" content="Feedback — João Andrade">
-<meta property="og:description" content="Deixe seu feedback sobre o trabalho que fiz — leva menos de um minuto.">
+<meta property="og:description" content="Deixe seu feedback sobre sua experiência, leva menos de um minuto.">
 <meta property="og:image" content="https://joaoandrad.github.io/assets/logos/og-preview.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Feedback — João Andrade">
-<meta name="twitter:description" content="Deixe seu feedback sobre o trabalho que fiz — leva menos de um minuto.">
+<meta name="twitter:description" content="Deixe seu feedback sobre sua experiência, leva menos de um minuto.">
 <meta name="twitter:image" content="https://joaoandrad.github.io/assets/logos/og-preview.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -341,17 +341,17 @@
 
   function renderDone() {
     var good = isGood();
-    var doneTitle = good ? 'Obrigado — isso vale muito' : 'Recebi, e vou levar a sério';
+    var doneTitle = good ? 'Muito obrigado!' : 'Obrigado pelo feedback!';
     var doneSub = good
       ? (state.publish
-          ? 'Seu comentário pode aparecer no meu portfólio. Se conhecer alguém que precise de algo parecido, ficarei grato pela indicação.'
-          : 'Guardei aqui comigo. Se mudar de ideia sobre publicar, me avisa.')
-      : 'Não vou tratar isso como número numa planilha. Se deixou seu nome, eu te procuro nos próximos dias.';
+          ? 'Obrigado por compartilhar seu feedback comigo! Em breve, você verá seu comentário no meu portfólio.'
+          : 'Feedback salvo com sucesso!. Se mudar de ideia sobre publicar, me avisa.')
+      : 'Obrigado pela sinceridade. Levo feedbacks extremamente a sério, e vou usar o que você escreveu para melhorar meu trabalho.';
 
     var actions = good
       ? [
-          { label: 'Ver o portfólio →', href: 'index.html', target: '_self', style: 'display:inline-block;padding:14px 24px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:600;border-radius:9px' },
-          { label: 'Indicar no WhatsApp ↗', href: waHref('Olá'), target: '_blank', style: 'display:inline-block;padding:14px 24px;border:1px solid var(--line-2);font-size:15px;font-weight:500;border-radius:9px' }
+          { label: 'Ver portfólio →', href: 'index.html', target: '_self', style: 'display:inline-block;padding:14px 24px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:600;border-radius:9px' },
+          { label: 'Meu WhatsApp ↗', href: waHref('Olá'), target: '_blank', style: 'display:inline-block;padding:14px 24px;border:1px solid var(--line-2);font-size:15px;font-weight:500;border-radius:9px' }
         ]
       : [
           { label: 'Falar comigo agora ↗', href: waHref('Olá'), target: '_blank', style: 'display:inline-block;padding:14px 24px;background:var(--ink);color:var(--bg);font-size:15px;font-weight:600;border-radius:9px' }
