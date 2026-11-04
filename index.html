@@ -165,34 +165,8 @@
   @media (prefers-reduced-motion: reduce) { .glf-mock__bubble { animation: none; opacity: .9; } }
 
   /* Vida — phone + pixel-art garden built from the app's real sprites (theme tokens from src/theme/tokens.ts) */
-  .vida-media { background: radial-gradient(120% 90% at 50% 0%, #F7E6BF 0%, #DCE8D9 70%, #C9DCC5 100%); display: flex; align-items: center; justify-content: center; }
-  .vida-mock { width: 232px; height: 400px; background: #1F2A22; border-radius: 34px; padding: 8px; box-sizing: border-box; box-shadow: 0 16px 40px rgba(31,42,34,.35); flex-shrink: 0; }
-  .vida-mock__screen { width: 100%; height: 100%; border-radius: 27px; overflow: hidden; background: #FBFAF5; color: #1F2A22; font-family: 'Nunito', system-ui, sans-serif; display: flex; flex-direction: column; }
-  .vida-mock img { image-rendering: pixelated; image-rendering: crisp-edges; display: block; -webkit-user-drag: none; }
-  .vida-mock__top { display: flex; align-items: center; gap: 7px; padding: 12px 14px 8px; flex-shrink: 0; }
-  .vida-mock__top img { width: 20px; height: 20px; border-radius: 6px; }
-  .vida-mock__name { font-size: 13px; font-weight: 800; }
-  .vida-mock__lvl { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 9.5px; font-weight: 800; color: #7A560F; }
-  .vida-mock__xp { width: 46px; height: 6px; border-radius: 99px; background: #F7E6BF; overflow: hidden; }
-  .vida-mock__xp span { display: block; height: 100%; width: 62%; background: #E2A93B; border-radius: 99px; animation: vida-xp 9s ease-in-out infinite; }
-  .vida-mock__scene { margin: 0 8px; border-radius: 14px; overflow: hidden; flex-shrink: 0; }
-  .vida-mock__scene img { width: 100%; height: auto; aspect-ratio: 192/112; }
-  .vida-mock__list { padding: 10px 12px 0; display: flex; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
-  .vida-mock__label { font-size: 8.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #5D6B60; margin: 0 2px 1px; }
-  .vida-mock__task { display: flex; align-items: center; gap: 8px; background: #F1F3EB; border-radius: 10px; padding: 7px 9px; font-size: 10.5px; font-weight: 700; position: relative; }
-  .vida-mock__chk { width: 13px; height: 13px; border-radius: 4px; border: 1.5px solid #B8C2B4; box-sizing: border-box; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .vida-mock__chk.is-on { background: #4F7A55; border-color: #4F7A55; }
-  .vida-mock__chk svg { width: 9px; height: 9px; }
-  .vida-mock__chk--anim { animation: vida-check 9s ease-in-out infinite; }
-  .vida-mock__chk--anim svg { animation: vida-check-mark 9s ease-in-out infinite; }
-  .vida-mock__cat { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .vida-mock__gain { position: absolute; right: 22px; top: 2px; font-size: 9px; font-weight: 800; color: #7A560F; opacity: 0; animation: vida-gain 9s ease-out infinite; }
-  .vida-mock__focus { margin: 9px 12px 13px; background: #4F7A55; color: #fff; border-radius: 12px; padding: 9px; text-align: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
-  @keyframes vida-check { 0%, 30% { background: transparent; border-color: #B8C2B4; } 34%, 92% { background: #4F7A55; border-color: #4F7A55; } 96%, 100% { background: transparent; border-color: #B8C2B4; } }
-  @keyframes vida-check-mark { 0%, 30% { opacity: 0; } 34%, 92% { opacity: 1; } 96%, 100% { opacity: 0; } }
-  @keyframes vida-gain { 0%, 33% { opacity: 0; transform: translateY(4px); } 37% { opacity: 1; transform: translateY(0); } 50% { opacity: 0; transform: translateY(-8px); } 100% { opacity: 0; } }
-  @keyframes vida-xp { 0%, 33% { width: 62%; } 42%, 92% { width: 74%; } 97%, 100% { width: 62%; } }
-  @media (prefers-reduced-motion: reduce) { .vida-mock * { animation: none !important; } .vida-mock__chk--anim { background: #4F7A55; border-color: #4F7A55; } .vida-mock__gain { display: none; } }
+  .vida-media { background: #FBFAF5; aspect-ratio: 9 / 16; width: 100%; max-width: 360px; justify-self: center; }
+  .vida-motion { display: block; width: 100%; height: 100%; object-fit: cover; background: #FBFAF5; }
 
   @media (max-width: 640px) {
     .herm-card-media { aspect-ratio: 4/5.6 !important; }
@@ -515,25 +489,8 @@
 
 <section id="vida" data-theme="0" data-sec="" style="min-height:100vh;box-sizing:border-box;display:flex;align-items:center;color:var(--ink);padding:18vh 40px">
   <div data-split="" style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1fr);gap:60px;align-items:center;width:100%">
-    <div data-media="" class="vida-media" style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;height:430px;box-shadow:0 18px 50px var(--shadow)">
-      <div class="vida-mock" aria-hidden="true">
-        <div class="vida-mock__screen">
-          <div class="vida-mock__top">
-            <img src="assets/vida/vida-icon.png" alt="">
-            <span class="vida-mock__name">Vida</span>
-            <span class="vida-mock__lvl">NV 9<span class="vida-mock__xp"><span></span></span></span>
-          </div>
-          <div class="vida-mock__scene"><img src="assets/vida/vida-mundo.png" alt=""></div>
-          <div class="vida-mock__list">
-            <div class="vida-mock__label">Hoje</div>
-            <div class="vida-mock__task"><span class="vida-mock__chk is-on"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Beber água<span class="vida-mock__cat" style="background:#5E9A6A"></span></div>
-            <div class="vida-mock__task"><span class="vida-mock__chk is-on"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Lavar a louça<span class="vida-mock__cat" style="background:#C77A4E"></span></div>
-            <div class="vida-mock__task"><span class="vida-mock__chk vida-mock__chk--anim"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>Ler 20 páginas<span class="vida-mock__gain">+10 XP</span><span class="vida-mock__cat" style="background:#5C82A8"></span></div>
-            <div class="vida-mock__task"><span class="vida-mock__chk"></span>Ligar pra vó<span class="vida-mock__cat" style="background:#D9A23A"></span></div>
-          </div>
-          <div class="vida-mock__focus">Começar foco · 25 min</div>
-        </div>
-      </div>
+    <div data-media="" class="vida-media" style="border:1px solid var(--line-2);border-radius:18px;overflow:hidden;box-shadow:0 18px 50px var(--shadow)">
+      <video id="vidaMotion" class="vida-motion" src="assets/vida/vida-motion.mp4" poster="assets/vida/vida-motion-poster.jpg" muted loop playsinline preload="none" aria-label="Demonstração do app Vida: aba Hoje, Dinheiro, Treino, Alimentação, Hábitos, Foco, Filmes e livros, Bem-estar e Você"></video>
     </div>
     <div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
@@ -1031,6 +988,20 @@
     }
     timer = setTimeout(tick, 1200);
   })();
+})();
+
+(function initVidaMotion() {
+  // Só baixa e toca o vídeo do Vida quando ele entra na tela; pausa ao sair. Com
+  // movimento reduzido fica só o poster.
+  var v = document.getElementById('vidaMotion');
+  if (!v || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) { v.preload = 'auto'; v.play().catch(function () {}); return; }
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { if (v.preload !== 'auto') v.preload = 'auto'; v.play().catch(function () {}); }
+      else v.pause();
+    });
+  }, { threshold: 0.25 }).observe(v);
 })();
 
 (function initMediaTilt() {
